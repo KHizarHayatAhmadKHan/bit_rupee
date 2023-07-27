@@ -1,3 +1,5 @@
+import 'package:bit_rupee/views/Send_money.dart';
+import 'package:bit_rupee/views/Wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,14 +10,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  late String _id; 
+  late String _id;
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-
-      print('Login successful with ID: $_id');
-    }
-  }
+  // _submitForm() {
+  //   if (_formKey.currentState!.validate()) {
+  //     print('Login successful with ID: $_id');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
       ),
       body: Container(
+        // width: 1100,
         decoration: const BoxDecoration(color: Colors.green),
         child: Form(
           key: _formKey,
@@ -67,13 +69,20 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: 300,
                 child: TextFormField(
-                  
+                  // autofocus: true,
+                  obscureText: true,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(
+                      enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30.0),
-                        borderSide: const BorderSide(color: Colors.white),
+                        borderSide:
+                            const BorderSide(width: 2, color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 2, color: Colors.blue),
+                        borderRadius: BorderRadius.circular(30.0),
                       ),
                       labelText: 'Enter Wallet Number',
                       labelStyle: const TextStyle(color: Colors.white)),
@@ -94,8 +103,13 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
-                  
-                  onPressed: _submitForm,
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => Wallet()));
+                    }
+                  },
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.white),
