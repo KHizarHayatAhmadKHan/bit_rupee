@@ -8,10 +8,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  late String _id;
+  late String _id; 
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+
       print('Login successful with ID: $_id');
     }
   }
@@ -20,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Welcome to bitRupee",
           style: TextStyle(
             color: Colors.white,
@@ -30,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.more_vert, color: Colors.white),
+            icon: const Icon(Icons.more_vert, color: Colors.white),
             onPressed: () {},
           ),
         ],
@@ -38,13 +39,13 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
       ),
       body: Container(
-        decoration: BoxDecoration(color: Colors.green),
+        decoration: const BoxDecoration(color: Colors.green),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
+              const Text(
                 'Please Enter the Wallet ID to continue',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -52,29 +53,30 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
-              Icon(
+              const Icon(
                 Icons.wallet,
                 size: 80,
                 color: Colors.white,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               SizedBox(
                 width: 300,
                 child: TextFormField(
+                  
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide(color: Colors.white),
+                        borderSide: const BorderSide(color: Colors.white),
                       ),
                       labelText: 'Enter Wallet Number',
-                      labelStyle: TextStyle(color: Colors.white)),
+                      labelStyle: const TextStyle(color: Colors.white)),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your id.';
@@ -86,23 +88,24 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
+                  
                   onPressed: _submitForm,
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.white),
                       padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.all(20)),
+                          const EdgeInsets.all(20)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ))),
-                  child: Text(
+                  child: const Text(
                     'Submit',
                     style: TextStyle(
                       color: Colors.green,
