@@ -1,7 +1,10 @@
+import 'package:bit_rupee/Post_data.dart';
 import 'package:bit_rupee/views/Send_money.dart';
 import 'package:bit_rupee/views/Wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../post.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,6 +12,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Future<Post?>? post;
+
   final _formKey = GlobalKey<FormState>();
   late String _id;
 
@@ -61,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const Icon(
                 Icons.wallet,
-                size: 80,
+                size: 78,
                 color: Colors.white,
               ),
               const SizedBox(
@@ -105,6 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: 300,
                 child: ElevatedButton(
                   onPressed: () {
+                    postData;
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       Navigator.pushReplacement(context,
