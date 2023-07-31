@@ -1,10 +1,8 @@
-import 'package:bit_rupee/Post_data.dart';
-import 'package:bit_rupee/views/Send_money.dart';
+import 'dart:convert';
 import 'package:bit_rupee/views/Wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../post.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -12,17 +10,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Future<Post?>? post;
-
   final _formKey = GlobalKey<FormState>();
   late String _id;
-
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-
-      print('Login successful with ID: $_id');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +35,6 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
       ),
       body: Container(
-        // width: 1100,
         decoration: const BoxDecoration(color: Colors.green),
         child: Form(
           key: _formKey,
@@ -75,7 +63,6 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: 300,
                 child: TextFormField(
-                  // autofocus: true,
                   obscureText: true,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
@@ -109,12 +96,109 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
-                  onPressed: () {
-                    postData;
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => Wallet()));
+
+                      try {
+                        final response = await http.get(Uri.parse(
+                            'http://172.16.2.222:8080/bitrupee/api/wutxo/$_id'));
+
+                        if (response.statusCode == 200) {
+                          final responseData = json.decode(response.body);
+                          if (responseData != null &&
+                              responseData.containsKey('id') &&
+                              responseData.containsKey('walletAddress') &&
+                              responseData.containsKey('balance')) {
+                            Navigator.pushNamed(
+                              context,
+                              '/wallet',
+                              arguments: {
+                                'id': responseData['id'],
+                                'walletaddress': responseData['walletAddress'],
+                                'balance': responseData['balance'],
+                                // Add other parameters here...
+                              },
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Invalid ID'),
+                                  content: const Text(
+                                      'The provided ID is invalid or does not exist.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('API Error'),
+                                content: const Text(
+                                    'Failed to fetch data from the API.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      } catch (e) {
+                        print('Error during API call: $e');
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Error'),
+                              content: const Text(
+                                  'An error occurred while fetching data from the API.'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Invalid ID'),
+                            content: const Text('Please enter a valid ID.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     }
                   },
                   style: ButtonStyle(

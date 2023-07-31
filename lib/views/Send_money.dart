@@ -19,6 +19,7 @@ class _SendMoneyState extends State<send_money> {
       _formKey.currentState!.save();
       // Now you can use the _amount and _user_id variables as needed, e.g., send them to an API or process the form data.
       print('Amount to send: $_amount');
+      print('Amount to send: $_user_id');
       // Your logic to send money here...
     }
   }
