@@ -1,9 +1,14 @@
-// ignore_for_file: prefer_const_constructors
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class send_money extends StatefulWidget {
-  const send_money({Key? key}) : super(key: key);
+  final int senderId;
+  final String walletaddress;
+
+  const send_money(
+      {Key? key, required this.senderId, required this.walletaddress})
+      : super(key: key);
 
   @override
   State<send_money> createState() => _SendMoneyState();
@@ -12,15 +17,61 @@ class send_money extends StatefulWidget {
 class _SendMoneyState extends State<send_money> {
   final _formKey = GlobalKey<FormState>();
   String _amount = '';
-  String _user_id = '';
+  String _receiverId = '';
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      // Now you can use the _amount and _user_id variables as needed, e.g., send them to an API or process the form data.
-      print('Amount to send: $_amount');
-      print('Amount to send: $_user_id');
-      // Your logic to send money here...
+
+      final url = Uri.parse(
+        'http://172.16.2.222:8080/bitrupee/api/transaction/${widget.senderId}/$_receiverId/$_amount',
+      );
+
+      try {
+        final response = await http.get(url);
+
+        if (response.statusCode == 200) {
+          final responseData = json.decode(response.body);
+          if (responseData == true) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Money transferred successfully!'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+
+            await Future.delayed(Duration(seconds: 3));
+            Navigator.pop(context);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Money transfer failed! Please try again.'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+            await Future.delayed(Duration(seconds: 1));
+            Navigator.pop(context);
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Money transfer failed! Please try again.'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+          await Future.delayed(Duration(seconds: 1));
+          Navigator.pop(context);
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Money transfer failed! Please try again.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        await Future.delayed(Duration(seconds: 1));
+        Navigator.pop(context);
+      }
     }
   }
 
@@ -56,9 +107,7 @@ class _SendMoneyState extends State<send_money> {
           key: _formKey,
           child: Column(
             children: [
-              SizedBox(
-                height: 12,
-              ),
+              SizedBox(),
               Icon(Icons.wallet, color: Colors.green, size: 78),
               SizedBox(
                 height: 30,
@@ -70,6 +119,7 @@ class _SendMoneyState extends State<send_money> {
                   border: Border.all(color: Colors.grey, width: 1.5),
                 ),
                 child: TextFormField(
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: 'Amount to send',
                     border: InputBorder.none,
@@ -96,6 +146,7 @@ class _SendMoneyState extends State<send_money> {
                   border: Border.all(color: Colors.grey, width: 1.5),
                 ),
                 child: TextFormField(
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: 'Account number',
                     border: InputBorder.none,
@@ -108,7 +159,7 @@ class _SendMoneyState extends State<send_money> {
                     return null;
                   },
                   onSaved: (value) {
-                    _user_id = value!;
+                    _receiverId = value!;
                   },
                 ),
               ),
@@ -120,9 +171,10 @@ class _SendMoneyState extends State<send_money> {
                   Expanded(
                     child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.green)),
-                      onPressed: () {},
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.green),
+                      ),
+                      onPressed: _submitForm,
                       child: Text('Submit'),
                     ),
                   ),

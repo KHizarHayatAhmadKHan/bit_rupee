@@ -117,7 +117,6 @@ class _LoginPageState extends State<LoginPage> {
                                 'id': responseData['id'],
                                 'walletaddress': responseData['walletAddress'],
                                 'balance': responseData['balance'],
-                                // Add other parameters here...
                               },
                             );
                           } else {
