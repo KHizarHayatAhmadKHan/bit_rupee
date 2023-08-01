@@ -34,6 +34,7 @@ class _WalletState extends State<Wallet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
         actions: [
           IconButton(
@@ -51,11 +52,12 @@ class _WalletState extends State<Wallet> {
         //   decoration: BoxDecoration(
         //     color: Colors.grey,
         //   ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 450),
-          child: Column(
-            children: [
-              AnimatedContainer(
+
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(15, 10, 15, 7),
+              child: AnimatedContainer(
                 duration: Duration(milliseconds: 300),
                 height: _isExpanded ? 400.0 : 170.0,
                 decoration: BoxDecoration(
@@ -89,11 +91,6 @@ class _WalletState extends State<Wallet> {
                                   style: TextStyle(fontSize: 18)),
                             ],
                           ),
-                          // SizedBox(
-                          //   width: 90.0,
-                          // ),
-                          // Text("BTR", style: TextStyle(fontSize: 15)),
-
                           Expanded(
                             child: Align(
                               alignment: Alignment.centerRight,
@@ -131,27 +128,27 @@ class _WalletState extends State<Wallet> {
                   ],
                 ),
               ),
-              SizedBox(height: 10.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/sendmoney', arguments: {
-                    'id': widget.id,
-                    'walletAddress': widget.walletaddress,
-                  });
-                },
-                child: Text("Send Money"),
-                style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(Size(350, 50)),
-                  backgroundColor: MaterialStateProperty.all(
-                      const Color.fromARGB(255, 85, 209, 89)),
-                  textStyle: MaterialStateProperty.all(
-                      TextStyle(color: Colors.white, fontSize: 16)),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15))),
-                ),
-              )
-            ],
-          ),
+            ),
+            SizedBox(height: 10.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/sendmoney', arguments: {
+                  'id': widget.id,
+                  'walletAddress': widget.walletaddress,
+                });
+              },
+              child: Text("Send Money"),
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all(Size(350, 50)),
+                backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 85, 209, 89)),
+                textStyle: MaterialStateProperty.all(
+                    TextStyle(color: Colors.white, fontSize: 16)),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15))),
+              ),
+            )
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
