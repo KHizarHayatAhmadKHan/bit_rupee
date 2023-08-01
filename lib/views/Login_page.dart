@@ -31,11 +31,13 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () {},
           ),
         ],
-        backgroundColor: Colors.green,
+        backgroundColor: const Color.fromARGB(255, 85, 209, 89),
         centerTitle: true,
       ),
       body: Container(
-        decoration: const BoxDecoration(color: Colors.green),
+        width: double.infinity,
+        decoration:
+            const BoxDecoration(color: Color.fromARGB(255, 85, 209, 89)),
         child: Form(
           key: _formKey,
           child: Column(
