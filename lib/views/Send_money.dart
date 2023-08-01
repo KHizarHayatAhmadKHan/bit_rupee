@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class send_money extends StatefulWidget {
@@ -108,7 +109,8 @@ class _SendMoneyState extends State<send_money> {
           child: Column(
             children: [
               SizedBox(),
-              Icon(Icons.wallet, color: Colors.green, size: 78),
+              Icon(Icons.wallet,
+                  color: const Color.fromARGB(255, 85, 209, 89), size: 78),
               SizedBox(
                 height: 30,
               ),
@@ -119,6 +121,7 @@ class _SendMoneyState extends State<send_money> {
                   border: Border.all(color: Colors.grey, width: 1.5),
                 ),
                 child: TextFormField(
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: 'Amount to send',
@@ -146,6 +149,7 @@ class _SendMoneyState extends State<send_money> {
                   border: Border.all(color: Colors.grey, width: 1.5),
                 ),
                 child: TextFormField(
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: 'Account number',
