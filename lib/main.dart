@@ -64,6 +64,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // color: Colors.grey,
+      
       home: LoginPage(),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: _onGenerateRoute,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bit_rupee/Signup_page.dart';
 import 'package:bit_rupee/views/Wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -214,13 +215,44 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text(
                     'Submit',
                     style: TextStyle(
-                      color: Colors.green,
+                      color: Color.fromARGB(255, 85, 209, 89),
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                  width: 300,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Signup()),
+                      );
+                    },
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            const EdgeInsets.all(20)),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ))),
+                    child: const Text(
+                      'Signup',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 85, 209, 89),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ), // Text displayed on the button
+                  )),
             ],
           ),
         ),

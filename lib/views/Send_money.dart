@@ -175,11 +175,25 @@ class _SendMoneyState extends State<send_money> {
                   Expanded(
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.green),
-                      ),
+                          //
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color.fromARGB(255, 85, 209, 89)),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                              const EdgeInsets.all(20)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ))),
                       onPressed: _submitForm,
-                      child: Text('Submit'),
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 249, 252, 249),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ],
