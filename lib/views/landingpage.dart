@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:bit_rupee/views/Wallet.dart';
 import 'package:bit_rupee/views/notification.dart';
 import 'package:bit_rupee/views/qr.dart';
@@ -13,11 +11,11 @@ class landingpage extends StatefulWidget {
   final String walletaddress;
   final int balance;
 
-  landingpage({  
+  landingpage({
     required this.id,
     required this.walletaddress,
     required this.balance,
-    });
+  });
 
   @override
   State<landingpage> createState() => _landingpageState();
@@ -25,28 +23,32 @@ class landingpage extends StatefulWidget {
 
 class _landingpageState extends State<landingpage> {
   int _currentIndex = 0;
+  late List<Widget> _screens; // Declare the _screens list
 
-  final List<Widget> _screens = [
-      // Wallet(id: id, walletaddress: walletaddress, balance: balance),
-    explore(),
-    explore(),
-    qr(),
-    notification(),
-    setting(),
-  ];
-  
- 
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the _screens list in the initState where you have access to widget properties
+    _screens = [
+      Wallet(
+          id: widget.id,
+          walletaddress: widget.walletaddress,
+          balance: widget.balance),
+      explore(),
+      qr(),
+      notification(),
+      setting(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Custom Bottom Navigation Bar'),
-      ),
       body: _screens[_currentIndex],
       bottomNavigationBar: Container(
+        height: 65,
         decoration: BoxDecoration(
-          color: Colors.blueGrey[100],
+          color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
           boxShadow: [
             BoxShadow(
@@ -57,13 +59,13 @@ class _landingpageState extends State<landingpage> {
           ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            buildNavBarItem(Icons.account_balance_wallet_rounded, 'Screen 1', 0),
-            buildNavBarItem(Icons.explore_rounded, 'Screen 2', 1),
-            buildNavBarItem(Icons.qr_code, 'Screen 3', 2),
-            buildNavBarItem(Icons.notifications_active, 'Screen 4', 3),
-            buildNavBarItem(Icons.settings, 'Screen 5', 4),
+            buildNavBarItem(Icons.account_balance_wallet_rounded, 'Wallet', 0),
+            buildNavBarItem(Icons.explore_rounded, 'Explore', 1),
+            buildNavBarItem(Icons.qr_code, 'QR', 2),
+            buildNavBarItem(Icons.notifications_active, 'Notification', 3),
+            buildNavBarItem(Icons.settings, 'Settings', 4),
           ],
         ),
       ),
@@ -72,7 +74,7 @@ class _landingpageState extends State<landingpage> {
 
   Widget buildNavBarItem(IconData iconData, String title, int index) {
     final isSelected = _currentIndex == index;
-    final color = isSelected ? Colors.blue : Colors.grey;
+    final color = isSelected ? Colors.white : Colors.black;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -80,16 +82,12 @@ class _landingpageState extends State<landingpage> {
         });
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.blueGrey[200] : Colors.transparent,
-          borderRadius: BorderRadius.circular(15),
-        ),
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         child: Row(
           children: [
-            Icon(iconData, color: color),
-            SizedBox(width: 8),
-            Text(title, style: TextStyle(color: color)),
+            Icon(iconData,
+                size: 32, color: isSelected ? Colors.green : Colors.black),
+            // SizedBox(width: 8),
           ],
         ),
       ),

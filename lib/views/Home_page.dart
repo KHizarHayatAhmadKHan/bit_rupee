@@ -49,10 +49,7 @@ class Home extends StatelessWidget {
                 width: 300,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
+                    Navigator.pushNamed(context, '/login');
                   },
                   style: ButtonStyle(
                       backgroundColor:
@@ -79,10 +76,7 @@ class Home extends StatelessWidget {
                 width: 300,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Signup()),
-                    );
+                    Navigator.pushNamed(context, '/signup');
                   },
                   style: ButtonStyle(
                       backgroundColor:
@@ -96,7 +90,7 @@ class Home extends StatelessWidget {
                   child: const Text(
                     'Signup',
                     style: TextStyle(
-                      color: Colors.green,
+                      color: Color.fromRGBO(76, 175, 80, 1),
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
