@@ -185,32 +185,32 @@ Future<void> fetchDataAndUpdateData() async {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onTabTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet, color: Colors.black),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore, color: Colors.black),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code, color: Colors.black),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications, color: Colors.black),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings, color: Colors.black),
-            label: '',
-          ),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   currentIndex: _currentIndex,
+      //   onTap: _onTabTapped,
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.account_balance_wallet, color: Colors.black),
+      //       label: '',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.explore, color: Colors.black),
+      //       label: '',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.qr_code, color: Colors.black),
+      //       label: '',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.notifications, color: Colors.black),
+      //       label: '',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.settings, color: Colors.black),
+      //       label: '',
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
