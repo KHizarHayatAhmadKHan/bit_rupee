@@ -1,19 +1,14 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pointycastle/digests/sha256.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Signup(),
-    );
-  }
-}
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:pointycastle/key_generators/api.dart';
+import 'package:pointycastle/key_generators/rsa_key_generator.dart';
+import 'package:pointycastle/random/fortuna_random.dart';
+import 'package:pointycastle/api.dart';
+import 'package:pointycastle/asymmetric/api.dart';
 
 class Signup extends StatefulWidget {
   @override
@@ -48,7 +43,8 @@ class _SignupState extends State<Signup> {
       ),
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(color: Color.fromARGB(255, 85, 209, 89)),
+        decoration:
+            const BoxDecoration(color: Color.fromARGB(255, 85, 209, 89)),
         child: Form(
           key: _formKey,
           child: Column(
@@ -83,10 +79,12 @@ class _SignupState extends State<Signup> {
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(width: 2, color: Colors.white),
+                      borderSide:
+                          const BorderSide(width: 2, color: Colors.white),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(width: 2, color: Colors.blue),
+                      borderSide:
+                          const BorderSide(width: 2, color: Colors.blue),
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     labelText: 'Enter CNIC',
@@ -114,10 +112,12 @@ class _SignupState extends State<Signup> {
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(width: 2, color: Colors.white),
+                      borderSide:
+                          const BorderSide(width: 2, color: Colors.white),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(width: 2, color: Colors.blue),
+                      borderSide:
+                          const BorderSide(width: 2, color: Colors.blue),
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     labelText: 'Enter Secret_key',
@@ -140,13 +140,14 @@ class _SignupState extends State<Signup> {
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      // Process the private key generation
                       String privateKey = generatePrivateKey(_cnic, _secretKey);
                       print('Generated Private Key: $privateKey');
-                      // Perform your signup logic here
+                      String publicKey = await generatePublicKey(privateKey);
+
+                      print('Generated Public Key: $publicKey');
                     }
                   },
                   style: ButtonStyle(
@@ -182,7 +183,8 @@ class _SignupState extends State<Signup> {
     String combinedData = '$cnic$secretKey';
 
     // Generate SHA-256 hash of the combined data
-    Uint8List sha256Result = SHA256Digest().process(Uint8List.fromList(combinedData.codeUnits));
+    Uint8List sha256Result =
+        SHA256Digest().process(Uint8List.fromList(combinedData.codeUnits));
 
     // Convert the hash to a hexadecimal string
     String privateKey = '';
@@ -191,5 +193,49 @@ class _SignupState extends State<Signup> {
     }
 
     return privateKey;
+  }
+
+  Future<String> generatePublicKey(String privateKey) async {
+    // Create an RSA key generator object
+    var keyGen = RSAKeyGenerator();
+
+    // Create an RSA key generator parameters object with 2048 bits modulus length, public exponent 65537, and certainty 12
+    var keyParams = RSAKeyGeneratorParameters(BigInt.parse('65537'), 2048, 12);
+
+    // Create a secure random object
+    var secureRandom = SecureRandom('Fortuna');
+
+    // Create a random seed parameter object from the private key string
+    var randomParams = ParametersWithRandom(keyParams, secureRandom);
+    var seed = createUint8ListFromHexString(privateKey);
+    secureRandom.seed(KeyParameter(seed));
+
+    // Initialize the key generator with the random parameters
+    keyGen.init(randomParams);
+
+    // Generate an RSA key pair
+    var keyPair = keyGen.generateKeyPair();
+
+    // Return the public key from the key pair
+    RSAPublicKey publicKey = keyPair.publicKey as RSAPublicKey;
+
+    // Convert the public key components to a hexadecimal string
+    String publicExponentHex =
+        publicKey.exponent!.toRadixString(16).padLeft(2, '0');
+    String modulusHex = publicKey.modulus!.toRadixString(16).padLeft(2, '0');
+    String publicKeyHex = modulusHex + publicExponentHex;
+
+    return publicKeyHex;
+  }
+
+// Utility method to create a Uint8List from a hexadecimal string
+  Uint8List createUint8ListFromHexString(String hex) {
+    var result = Uint8List(hex.length ~/ 2);
+    for (var i = 0; i < hex.length; i += 2) {
+      var num = hex.substring(i, i + 2);
+      var byte = int.parse(num, radix: 16);
+      result[i ~/ 2] = byte;
+    }
+    return result;
   }
 }

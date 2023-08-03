@@ -86,7 +86,7 @@ class _landingpageState extends State<landingpage> {
         child: Row(
           children: [
             Icon(iconData,
-                size: 32, color: isSelected ? Colors.green : Colors.black),
+                size: 30, color: isSelected ? Colors.green : Colors.black),
             // SizedBox(width: 8),
           ],
         ),

@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^1.1.0
   pointycastle: ^3.7.3
+  fast_rsa: ^3.5.7
+  rsa_pkcs: ^1.1.2
 
 dev_dependencies:
   flutter_test:
