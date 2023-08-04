@@ -1,14 +1,17 @@
-import 'dart:async';
+import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pointycastle/digests/sha256.dart';
-import 'dart:convert';
-import 'dart:typed_data';
-import 'package:pointycastle/key_generators/api.dart';
-import 'package:pointycastle/key_generators/rsa_key_generator.dart';
+import 'package:pointycastle/macs/hmac.dart';
 import 'package:pointycastle/random/fortuna_random.dart';
-import 'package:pointycastle/api.dart';
-import 'package:pointycastle/asymmetric/api.dart';
+
+import 'package:pointycastle/signers/ecdsa_signer.dart';
+import 'package:convert/convert.dart';
+import 'dart:typed_data';
+import 'package:pointycastle/pointycastle.dart';
+import 'package:pointycastle/digests/sha256.dart';
+import 'package:pointycastle/ecc/api.dart';
+import 'package:pointycastle/ecc/curves/secp256k1.dart';
+import 'dart:math' as math;
 
 class Signup extends StatefulWidget {
   @override
@@ -143,11 +146,32 @@ class _SignupState extends State<Signup> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      String privateKey = generatePrivateKey(_cnic, _secretKey);
-                      print('Generated Private Key: $privateKey');
-                      String publicKey = await generatePublicKey(privateKey);
+                      // String privateKey = generatePrivateKey(_cnic, _secretKey);
+                      // print('Generated Private Key: $privateKey');
+                      // String publicKey = await generatePublicKey(privateKey);
 
-                      print('Generated Public Key: $publicKey');
+                      // print('Generated Public Key: $publicKey');
+                      Uint8List privateKey =
+                          generatePrivateKey(_cnic, _secretKey);
+                      print('Private Key: 0x${hex.encode(privateKey)}');
+
+                      Uint8List publicKey =
+                          generatePublicKey(privateKey).Q!.getEncoded(true);
+
+                      print(
+                          'Public Key: 0x${Uint8List.fromList(publicKey).toSet()}');
+                      print('Public Key: 0x${hex.encode(publicKey)}');
+
+                      String message = "Hello, world!";
+                      Uint8List messageBytes =
+                          Uint8List.fromList(message.codeUnits);
+
+                      Uint8List signature =
+                          signMessage(privateKey, messageBytes);
+                      print('Signature: 0x${hex.encode(signature)}');
+                      bool isSignatureValid =
+                          verifySignature(publicKey, messageBytes, signature);
+                      print('Signature Verification: $isSignatureValid');
                     }
                   },
                   style: ButtonStyle(
@@ -178,63 +202,112 @@ class _SignupState extends State<Signup> {
     );
   }
 
-  String generatePrivateKey(String cnic, String secretKey) {
-    // Combine CNIC and Secret_key
-    String combinedData = '$cnic$secretKey';
+//  function to generate private key using eliptical curve cryptography (ECC)
 
-    // Generate SHA-256 hash of the combined data
-    Uint8List sha256Result =
-        SHA256Digest().process(Uint8List.fromList(combinedData.codeUnits));
+  Uint8List generatePrivateKey(String input1, String input2) {
+    // Concatenate the inputs to create the seed
+    String seed = input1 + input2;
 
-    // Convert the hash to a hexadecimal string
-    String privateKey = '';
-    for (var byte in sha256Result) {
-      privateKey += byte.toRadixString(16).padLeft(2, '0');
+    // Create a SHA-256 digest of the seed
+    Digest sha256Digest = SHA256Digest();
+    Uint8List seedBytes = Uint8List.fromList(seed.codeUnits);
+    Uint8List digest = sha256Digest.process(seedBytes);
+
+    // Create an ECC private key using the secp256k1 curve
+    ECCurve_secp256k1 curve = ECCurve_secp256k1();
+    ECPrivateKey privateKey =
+        ECPrivateKey(BigInt.parse(hex.encode(digest), radix: 16), curve);
+
+    // Make sure the private key is within the valid range for the curve
+    BigInt n = curve.n;
+    BigInt privateKeyInt = privateKey.d!;
+    privateKeyInt = privateKeyInt % n;
+
+    String privateKeyHex = privateKeyInt.toRadixString(16).padLeft(64, '0');
+    Uint8List privateKeyBytes = Uint8List.fromList(hex.decode(privateKeyHex));
+
+    return privateKeyBytes;
+  }
+
+  ECPublicKey generatePublicKey(Uint8List privateKeyBytes) {
+    ECCurve_secp256k1 curve = ECCurve_secp256k1();
+    ECPrivateKey privateKey = ECPrivateKey(
+        BigInt.parse(hex.encode(privateKeyBytes), radix: 16), curve);
+
+    ECPoint? publicKeyPoint = curve.G * privateKey.d!;
+    return ECPublicKey(publicKeyPoint, curve);
+  }
+
+// Function to sign a message using the private key
+  // Function to sign a message using the private key
+  Uint8List signMessage(Uint8List privateKeyBytes, Uint8List message) {
+    ECCurve_secp256k1 curve = ECCurve_secp256k1();
+    ECPrivateKey privateKey = ECPrivateKey(
+        BigInt.parse(hex.encode(privateKeyBytes), radix: 16), curve);
+
+    // Create a secure random number generator
+    SecureRandom secureRandom = FortunaRandom();
+    secureRandom.seed(KeyParameter(Uint8List.fromList(privateKeyBytes)));
+
+    final sha256Digest = SHA256Digest();
+    final hmac = HMac(sha256Digest, 64);
+    final signer = ECDSASigner(sha256Digest, hmac); // Use the digests here
+    signer.init(true, PrivateKeyParameter(privateKey));
+
+    final signature = signer.generateSignature(Uint8List.fromList(message));
+
+    // Extract r and s from the Signature object
+    BigInt r = (signature as ECSignature).r;
+    BigInt s = (signature).s;
+
+    // Convert r and s to 32-byte Uint8Lists
+    Uint8List rBytes = _encodeBigInt(r, 32);
+    Uint8List sBytes = _encodeBigInt(s, 32);
+
+    // Concatenate r and s to get the 64-byte signature
+    Uint8List signatureBytes = Uint8List.fromList([...rBytes, ...sBytes]);
+
+    return signatureBytes;
+  }
+
+  Uint8List _encodeBigInt(BigInt value, int size) {
+    var result = Uint8List(size);
+    for (var i = size - 1; i >= 0; i--) {
+      result[i] = value.toUnsigned(8).toInt();
+      value >>= 8;
     }
-
-    return privateKey;
+    return result;
   }
 
-  Future<String> generatePublicKey(String privateKey) async {
-    // Create an RSA key generator object
-    var keyGen = RSAKeyGenerator();
+// Function to verify a signature using the public key
+  bool verifySignature(
+      Uint8List publicKeyBytes, Uint8List message, Uint8List signatureBytes) {
+    ECCurve_secp256k1 curve = ECCurve_secp256k1();
+    ECPublicKey publicKey =
+        ECPublicKey(curve.curve.decodePoint(publicKeyBytes), curve);
 
-    // Create an RSA key generator parameters object with 2048 bits modulus length, public exponent 65537, and certainty 12
-    var keyParams = RSAKeyGeneratorParameters(BigInt.parse('65537'), 2048, 12);
+    ECDSASigner signer = ECDSASigner(SHA256Digest(), HMac(SHA256Digest(), 64));
+    signer.init(false, PublicKeyParameter(publicKey));
 
-    // Create a secure random object
-    var secureRandom = SecureRandom('Fortuna');
+    // Split the signatureBytes into r and s components
+    int halfLength = signatureBytes.length ~/ 2;
+    Uint8List rBytes = signatureBytes.sublist(0, halfLength);
+    Uint8List sBytes = signatureBytes.sublist(halfLength);
 
-    // Create a random seed parameter object from the private key string
-    var randomParams = ParametersWithRandom(keyParams, secureRandom);
-    var seed = createUint8ListFromHexString(privateKey);
-    secureRandom.seed(KeyParameter(seed));
+    // Convert r and s to BigInt
+    BigInt r = decodeBigInt(rBytes);
+    BigInt s = decodeBigInt(sBytes);
 
-    // Initialize the key generator with the random parameters
-    keyGen.init(randomParams);
+    // Create the ECSignature instance
+    ECSignature signature = ECSignature(r, s);
 
-    // Generate an RSA key pair
-    var keyPair = keyGen.generateKeyPair();
-
-    // Return the public key from the key pair
-    RSAPublicKey publicKey = keyPair.publicKey as RSAPublicKey;
-
-    // Convert the public key components to a hexadecimal string
-    String publicExponentHex =
-        publicKey.exponent!.toRadixString(16).padLeft(2, '0');
-    String modulusHex = publicKey.modulus!.toRadixString(16).padLeft(2, '0');
-    String publicKeyHex = modulusHex + publicExponentHex;
-
-    return publicKeyHex;
+    return signer.verifySignature(Uint8List.fromList(message), signature);
   }
 
-// Utility method to create a Uint8List from a hexadecimal string
-  Uint8List createUint8ListFromHexString(String hex) {
-    var result = Uint8List(hex.length ~/ 2);
-    for (var i = 0; i < hex.length; i += 2) {
-      var num = hex.substring(i, i + 2);
-      var byte = int.parse(num, radix: 16);
-      result[i ~/ 2] = byte;
+  BigInt decodeBigInt(Uint8List bytes) {
+    BigInt result = BigInt.zero;
+    for (int i = 0; i < bytes.length; i++) {
+      result = (result << 8) + BigInt.from(bytes[i]);
     }
     return result;
   }
