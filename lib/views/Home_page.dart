@@ -1,5 +1,3 @@
-import 'package:bit_rupee/views/Signup_page.dart';
-import 'package:bit_rupee/views/Login_page.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {

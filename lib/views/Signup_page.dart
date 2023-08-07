@@ -1,17 +1,14 @@
+import 'dart:convert';
 import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pointycastle/macs/hmac.dart';
 import 'package:pointycastle/random/fortuna_random.dart';
-
 import 'package:pointycastle/signers/ecdsa_signer.dart';
-import 'package:convert/convert.dart';
-import 'dart:typed_data';
 import 'package:pointycastle/pointycastle.dart';
 import 'package:pointycastle/digests/sha256.dart';
-import 'package:pointycastle/ecc/api.dart';
 import 'package:pointycastle/ecc/curves/secp256k1.dart';
-import 'dart:math' as math;
+import 'package:http/http.dart' as http;
 
 class Signup extends StatefulWidget {
   @override
@@ -22,6 +19,30 @@ class _SignupState extends State<Signup> {
   final _formKey = GlobalKey<FormState>();
   String _cnic = '';
   late String _secretKey = '';
+
+  Future<void> makeApiRequest(
+      Uint8List publicKey, Uint8List signature, Uint8List messageBytes) async {
+    final url =
+        'http://172.16.2.46:8080/bitrupee/api/Test/${hex.encode(publicKey)}/${hex.encode(signature)}/${hex.encode(messageBytes)}';
+
+    try {
+      print('Making API request.');
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        // API call was successful
+        final responseData = json.decode(response.body);
+        print('API Response: $responseData');
+      } else {
+        // API call failed
+        print(
+            'API Request failed with status code in JAVA : ${response.statusCode}');
+      }
+    } catch (e) {
+      // Exception occurred during API call
+      print('API Request failed with exception: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,32 +167,37 @@ class _SignupState extends State<Signup> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      // String privateKey = generatePrivateKey(_cnic, _secretKey);
-                      // print('Generated Private Key: $privateKey');
-                      // String publicKey = await generatePublicKey(privateKey);
 
-                      // print('Generated Public Key: $publicKey');
                       Uint8List privateKey =
                           generatePrivateKey(_cnic, _secretKey);
                       print('Private Key: 0x${hex.encode(privateKey)}');
 
                       Uint8List publicKey =
                           generatePublicKey(privateKey).Q!.getEncoded(true);
-
-                      print(
-                          'Public Key: 0x${Uint8List.fromList(publicKey).toSet()}');
                       print('Public Key: 0x${hex.encode(publicKey)}');
+                      // print(
+                      // 'Public Key: 0x${Uint8List.fromList(publicKey).toSet()}');
+                      // print('Public Key: ${publicKey}');
+                      // print('Public Key: ${publicKey.length}');
 
-                      String message = "Hello, world!";
+                      String message = "hassan";
                       Uint8List messageBytes =
                           Uint8List.fromList(message.codeUnits);
+                      // print('Message: 0x${hex.encode(messageBytes)}');
+                      // print('Message: $messageBytes');
+                      // print('Message: ${messageBytes.length}');
 
                       Uint8List signature =
                           signMessage(privateKey, messageBytes);
                       print('Signature: 0x${hex.encode(signature)}');
+                      // print('Signature: ${signature}');
+                      // print('Signature: ${signature.length}');
                       bool isSignatureValid =
                           verifySignature(publicKey, messageBytes, signature);
-                      print('Signature Verification: $isSignatureValid');
+                      print(
+                          'Signature Verification in DART: $isSignatureValid');
+
+                      makeApiRequest(publicKey, signature, messageBytes);
                     }
                   },
                   style: ButtonStyle(
@@ -192,7 +218,7 @@ class _SignupState extends State<Signup> {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
-                  ), // Text displayed on the button
+                  ),
                 ),
               ),
             ],

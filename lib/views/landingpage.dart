@@ -74,7 +74,6 @@ class _landingpageState extends State<landingpage> {
 
   Widget buildNavBarItem(IconData iconData, String title, int index) {
     final isSelected = _currentIndex == index;
-    final color = isSelected ? Colors.white : Colors.black;
     return GestureDetector(
       onTap: () {
         setState(() {

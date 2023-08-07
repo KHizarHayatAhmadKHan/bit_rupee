@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:bit_rupee/views/Signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;

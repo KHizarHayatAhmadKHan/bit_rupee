@@ -30,7 +30,7 @@ class _WalletState extends State<Wallet> {
   Future<void> fetchDataAndUpdateData() async {
     try {
       final response = await http.get(Uri.parse(
-          'http://172.16.2.222:8080/bitrupee/api/wutxo/${widget.id}'));
+          'http://172.16.2.46:8080/bitrupee/api/wutxo/${widget.id}'));
 
       // Parse the response and update the state with the fetched data
       if (response.statusCode == 200) {

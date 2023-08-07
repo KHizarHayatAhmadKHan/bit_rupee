@@ -64,3 +64,21 @@
 //   },
 //   // Rest of the button code...
 // )
+
+// import 'dart:typed_data';
+// import 'package:pointycastle/pointycastle.dart';
+// import 'package:pointycastle/random/fortuna_random.dart';
+
+// void main() {
+//   final secureRandom = FortunaRandom(); // Use FortunaRandom for strong randomness
+//   final keyBytes = secureRandom.nextBytes(32); // for AES-256
+
+//   final aesKey = KeyParameter(Uint8List.fromList(keyBytes));
+
+//   print('Key: ${aesKey.key}');
+// }
+
+
+
+
+
