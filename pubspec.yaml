@@ -37,6 +37,7 @@ dependencies:
   http: ^1.1.0
   pointycastle: ^3.7.3
   convert: ^3.0.1
+  qr_flutter: ^4.1.0
   
   
 

@@ -25,7 +25,7 @@ class _SendMoneyState extends State<send_money> {
       _formKey.currentState!.save();
 
       final url = Uri.parse(
-        'http://172.16.2.222:8080/bitrupee/api/transaction/${widget.senderId}/$_receiverId/$_amount',
+        'http://172.16.2.163:8080/bitrupee/api/transaction/${widget.senderId}/$_receiverId/$_amount',
       );
 
       try {
