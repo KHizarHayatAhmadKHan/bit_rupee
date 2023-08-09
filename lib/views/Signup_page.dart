@@ -32,11 +32,10 @@ class _SignupState extends State<Signup> {
       if (response.statusCode == 200) {
         // API call was successful
         final responseData = json.decode(response.body);
-        print('API Response: $responseData');
+        print('API Response  in JAVA: $responseData');
       } else {
         // API call failed
-        print(
-            'API Request failed with status code in JAVA : ${response.statusCode}');
+        print('API Request failed with status code : ${response.statusCode}');
       }
     } catch (e) {
       // Exception occurred during API call
@@ -183,7 +182,7 @@ class _SignupState extends State<Signup> {
                       String message = "hassan";
                       Uint8List messageBytes =
                           Uint8List.fromList(message.codeUnits);
-                      // print('Message: 0x${hex.encode(messageBytes)}');
+                      print('Message: 0x${hex.encode(messageBytes)}');
                       // print('Message: $messageBytes');
                       // print('Message: ${messageBytes.length}');
 
