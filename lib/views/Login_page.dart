@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bit_rupee/views/qr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -103,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       try {
                         final response = await http.get(Uri.parse(
-                            'http://172.16.2.46:8080/bitrupee/api/wutxo/$_id'));
+                            'http://172.16.2.163:8080/bitrupee/api/wutxo/$_id'));
 
                         if (response.statusCode == 200) {
                           final responseData = json.decode(response.body);
@@ -111,14 +112,24 @@ class _LoginPageState extends State<LoginPage> {
                               responseData.containsKey('id') &&
                               responseData.containsKey('walletAddress') &&
                               responseData.containsKey('balance')) {
-                            Navigator.pushNamed(
+                            // Navigator.pushNamed(
+                            //   context,
+                            //   '/landing',
+                            //   arguments: {
+                            //     'id': responseData['id'],
+                            //     'walletaddress': responseData['walletAddress'],
+                            //     'balance': responseData['balance'],
+                            //   },
+                            // );
+                            String userId = _id;
+                            String baseUrl =
+                                'http://172.16.2.163:8080/bitrupee/api/wutxo/$_id';
+                            Navigator.push(
                               context,
-                              '/landing',
-                              arguments: {
-                                'id': responseData['id'],
-                                'walletaddress': responseData['walletAddress'],
-                                'balance': responseData['balance'],
-                              },
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    qr(userId: userId, baseUrl: baseUrl),
+                              ),
                             );
                           } else {
                             showDialog(
