@@ -35,7 +35,10 @@ class _landingpageState extends State<landingpage> {
           walletaddress: widget.walletaddress,
           balance: widget.balance),
       explore(),
-      qr(),
+      qr(
+        userId: '',
+        baseUrl: '',
+      ),
       notification(),
       setting(),
     ];
