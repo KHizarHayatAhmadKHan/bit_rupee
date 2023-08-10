@@ -1,13 +1,29 @@
-import 'package:bit_rupee/views/QRScannerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class qr extends StatelessWidget {
-  // final String userId;
-  // final String baseUrl;
+class QRScreen extends StatefulWidget {
+  @override
+  _QRScreenState createState() => _QRScreenState();
   final int id;
-  qr({required this.id});
+  QRScreen({required this.id});
   String get baseUrl => 'http://172.16.2.65:8080/bitrupee/api/wutxo/$id';
+}
+
+class _QRScreenState extends State<QRScreen> {
+  QRViewController? scannerController;
+  bool isScanning = false;
+
+  String get qrData => 'Sample QR Code Data';
+
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
+  @override
+  void dispose() {
+    scannerController?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,37 +45,72 @@ class qr extends StatelessWidget {
         backgroundColor: Color.fromARGB(255, 248, 250, 248),
         centerTitle: true,
       ),
-      // backgroundColor: Colors.grey[300],
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text(
-            'Please Scan the code to Send Money',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w400,
-                color: Color.fromARGB(255, 85, 209, 89)),
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          Center(
-            child: QrImageView(
-                data: baseUrl,
-                backgroundColor: Color.fromARGB(255, 223, 221, 221),
-                size: 200.0),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          SizedBox(
-            width: 300,
-            child: ElevatedButton(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              'Please Scan the code to Send Money',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w400,
+                  color: Color.fromARGB(255, 85, 209, 89)),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            if (!isScanning)
+              QrImageView(
+                data: widget.baseUrl,
+                key: qrKey,
+                backgroundColor: Colors.white,
+                size: 200.0,
+              )
+            else
+              Container(
+                width: 300,
+                height: 300,
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: (controller) {
+                    setState(() {
+                      scannerController = controller;
+                    });
+
+                    controller.scannedDataStream.listen((scanData) {
+                      if (isScanning) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('QR Code Scanned'),
+                            content: Text('Data: ${scanData.code}'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    });
+                  },
+                ),
+              ),
+            SizedBox(height: 20),
+            ElevatedButton(
               onPressed: () {
-                 Navigator.pushNamed(context, '/QRScannerScreen', arguments: {
-                  'id': id,
+                setState(() {
+                  isScanning = !isScanning;
+                  if (isScanning) {
+                    scannerController?.resumeCamera();
+                  } else {
+                    scannerController?.pauseCamera();
+                  }
                 });
               },
               style: ButtonStyle(
@@ -71,100 +122,18 @@ class qr extends StatelessWidget {
                       RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ))),
-              child: const Text(
-                'Send Money',
+              child: Text(
+                isScanning ? 'Go back' : 'Send Money',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 251, 253, 252),
+                  color: Color.fromARGB(255, 241, 245, 241),
                   fontSize: 20,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 20.0),
-          Text('Your ID: $id'),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
-
-
-// class _QRCodeScreenState extends State<qr> {
-  
-//   String data = "";
-//   // TextEditingController _userIdController = TextEditingController();
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text(
-//           "Send/ Recieve Money",
-//           style: TextStyle(
-//             color: Colors.black,
-//             fontSize: 24,
-//             fontWeight: FontWeight.bold,
-//           ),
-//         ),
-//         actions: [
-//           IconButton(
-//             icon: const Icon(Icons.wallet, color: Colors.grey),
-//             onPressed: () {},
-//           ),
-//         ],
-//         backgroundColor: Color.fromARGB(255, 248, 250, 248),
-//         centerTitle: true,
-//       ),
-//       // backgroundColor: Colors.grey[300],
-//       body: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: [
-//           const Text(
-//             'Please Scan the code to Send Money',
-//             textAlign: TextAlign.center,
-//             style: TextStyle(
-//                 fontSize: 24,
-//                 fontWeight: FontWeight.w400,
-//                 color: Color.fromARGB(255, 85, 209, 89)),
-//           ),
-//           const SizedBox(
-//             height: 40,
-//           ),
-//           Center(
-//             child: QrImageView(
-//                 data: userId,
-//                 backgroundColor: Color.fromARGB(255, 223, 221, 221),
-//                 size: 200.0),
-//           ),
-//           const SizedBox(
-//             height: 30,
-//           ),
-//           SizedBox(
-//             width: 300,
-//             child: ElevatedButton(
-//               onPressed: () {},
-//               style: ButtonStyle(
-//                   backgroundColor: MaterialStateProperty.all<Color>(
-//                       const Color.fromARGB(255, 85, 209, 89)),
-//                   padding: MaterialStateProperty.all<EdgeInsets>(
-//                       const EdgeInsets.all(20)),
-//                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-//                       RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(30.0),
-//                   ))),
-//               child: const Text(
-//                 'Send Money',
-//                 style: TextStyle(
-//                   color: Color.fromARGB(255, 251, 253, 252),
-//                   fontSize: 20,
-//                   fontWeight: FontWeight.w400,
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
