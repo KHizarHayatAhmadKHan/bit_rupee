@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRScannerScreen extends StatefulWidget {
-  QRScannerScreen(String baseUrl);
+  final int id;
+  QRScannerScreen({super.key, required this.id});
 
   @override
   _QRScannerScreenState createState() => _QRScannerScreenState();
@@ -73,15 +74,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
             width: 300,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => qr(
-                      userId: '',
-                      baseUrl: '',
-                    ),
-                  ),
-                );
+                Navigator.pushNamed(context, '/qr', arguments: {
+                  'id': widget.id,
+                });
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
