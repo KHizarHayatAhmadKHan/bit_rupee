@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:bit_rupee/views/qr.dart';
+import 'package:bit_rupee/views/QR.dart';
+// import 'package:bit_rupee/views/qr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -127,8 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                             // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         qr(userId: userId, baseUrl: baseUrl),
+                            //     builder: (context) => QRScreen(),
                             //   ),
                             // );
                           } else {

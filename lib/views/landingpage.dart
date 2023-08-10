@@ -1,6 +1,7 @@
 import 'package:bit_rupee/views/Wallet.dart';
 import 'package:bit_rupee/views/notification.dart';
-import 'package:bit_rupee/views/qr.dart';
+import 'package:bit_rupee/views/QR.dart';
+// import 'package:bit_rupee/views/qr.dart';
 import 'package:bit_rupee/views/setting.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class _landingpageState extends State<landingpage> {
           walletaddress: widget.walletaddress,
           balance: widget.balance),
       explore(),
-      qr(
+      QRScreen(
         id: widget.id,
       ),
       notification(),
