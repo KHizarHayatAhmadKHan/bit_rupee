@@ -36,8 +36,7 @@ class _landingpageState extends State<landingpage> {
           balance: widget.balance),
       explore(),
       qr(
-        userId: '',
-        baseUrl: '',
+        id: widget.id,
       ),
       notification(),
       setting(),

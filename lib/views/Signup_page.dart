@@ -23,7 +23,7 @@ class _SignupState extends State<Signup> {
   Future<void> makeApiRequest(
       Uint8List publicKey, Uint8List signature, Uint8List messageBytes) async {
     final url =
-        'http://172.16.2.46:8080/bitrupee/api/Test/${hex.encode(publicKey)}/${hex.encode(signature)}/${hex.encode(messageBytes)}';
+        'http://172.16.2.65:8080/bitrupee/api/Test/${hex.encode(publicKey)}/${hex.encode(signature)}/${hex.encode(messageBytes)}';
 
     try {
       print('Making API request.');

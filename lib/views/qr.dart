@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class qr extends StatelessWidget {
-  final String userId;
-  final String baseUrl;
-  const qr({super.key, required this.userId, required this.baseUrl});
-
+  // final String userId;
+  // final String baseUrl;
+  final int id;
+  qr({required this.id});
+  String get baseUrl => 'http://172.16.2.65:8080/bitrupee/api/wutxo/$id';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,12 +58,9 @@ class qr extends StatelessWidget {
             width: 300,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QRScannerScreen(baseUrl),
-                  ),
-                );
+                 Navigator.pushNamed(context, '/QRScannerScreen', arguments: {
+                  'id': id,
+                });
               },
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
@@ -84,7 +82,7 @@ class qr extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20.0),
-          Text('Your ID: $userId'),
+          Text('Your ID: $id'),
         ],
       ),
     );
