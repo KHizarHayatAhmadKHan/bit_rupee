@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:bit_rupee/config/Config.dart';
 
 class send_money extends StatefulWidget {
   final int senderId;
@@ -25,10 +26,11 @@ class _SendMoneyState extends State<send_money> {
       _formKey.currentState!.save();
 
       final url = Uri.parse(
-        'http://172.16.2.163:8080/bitrupee/api/transaction/${widget.senderId}/$_receiverId/$_amount',
+        '${Config.backendEndpoint}/transaction/${widget.senderId}/$_receiverId/$_amount',
       );
 
       try {
+        print(Config.backendEndpoint);
         final response = await http.get(url);
 
         if (response.statusCode == 200) {

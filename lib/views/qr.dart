@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-
+import 'package:bit_rupee/config/Config.dart';
 class QRScreen extends StatefulWidget {
   @override
   _QRScreenState createState() => _QRScreenState();
   final int id;
   QRScreen({required this.id});
-  String get baseUrl => 'http://172.16.2.65:8080/bitrupee/api/wutxo/$id';
+  String get baseUrl => '${Config.backendEndpoint}/wutxo/$id';
 }
 
 class _QRScreenState extends State<QRScreen> {

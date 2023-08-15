@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:bit_rupee/config/Config.dart';
 class Wallet extends StatefulWidget {
   final int id;
   final String walletaddress;
@@ -30,7 +30,7 @@ class _WalletState extends State<Wallet> {
   Future<void> fetchDataAndUpdateData() async {
     try {
       final response = await http.get(
-          Uri.parse('http://172.16.2.65:8080/bitrupee/api/wutxo/${widget.id}'));
+          Uri.parse('${Config.backendEndpoint}/wutxo/${widget.id}'));
 
       // Parse the response and update the state with the fetched data
       if (response.statusCode == 200) {

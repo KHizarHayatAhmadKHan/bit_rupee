@@ -1,9 +1,11 @@
 import 'dart:convert';
-import 'package:bit_rupee/views/QR.dart';
-// import 'package:bit_rupee/views/qr.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:bit_rupee/config/Config.dart';
+
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -104,8 +106,8 @@ class _LoginPageState extends State<LoginPage> {
                       _formKey.currentState!.save();
 
                       try {
-                        final response = await http.get(Uri.parse(
-                            'http://172.16.2.65:8080/bitrupee/api/wutxo/$_id'));
+                        final response = await http.get(Uri.parse('${Config.backendEndpoint}/wutxo/$_id'));
+                            
 
                         if (response.statusCode == 200) {
                           final responseData = json.decode(response.body);

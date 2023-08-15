@@ -1,6 +1,5 @@
 import 'package:bit_rupee/views/Home_page.dart';
 import 'package:bit_rupee/views/Login_page.dart';
-import 'package:bit_rupee/views/QRScannerScreen.dart';
 import 'package:bit_rupee/views/Send_money.dart';
 import 'package:bit_rupee/views/Signup_page.dart';
 import 'package:bit_rupee/views/Wallet.dart';
@@ -9,7 +8,8 @@ import 'package:bit_rupee/views/QR.dart';
 // import 'package:bit_rupee/views/qr.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  
   runApp(const MyApp());
 }
 

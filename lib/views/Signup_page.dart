@@ -9,7 +9,7 @@ import 'package:pointycastle/pointycastle.dart';
 import 'package:pointycastle/digests/sha256.dart';
 import 'package:pointycastle/ecc/curves/secp256k1.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:bit_rupee/config/Config.dart';
 class Signup extends StatefulWidget {
   @override
   _SignupState createState() => _SignupState();
@@ -23,7 +23,7 @@ class _SignupState extends State<Signup> {
   Future<void> makeApiRequest(
       Uint8List publicKey, Uint8List signature, Uint8List messageBytes) async {
     final url =
-        'http://172.16.2.65:8080/bitrupee/api/Test/${hex.encode(publicKey)}/${hex.encode(signature)}/${hex.encode(messageBytes)}';
+        '${Config.backendEndpoint}/Test/${hex.encode(publicKey)}/${hex.encode(signature)}/${hex.encode(messageBytes)}';
 
     try {
       print('Making API request.');
