@@ -39,7 +39,8 @@ dependencies:
   convert: ^3.0.1
   qr_flutter: ^4.1.0
   qr_code_scanner: ^1.0.1
-  
+  asn1lib: ^1.5.0
+  cryptography: ^2.5.0  
   
   
   

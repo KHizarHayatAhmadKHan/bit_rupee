@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,11 @@ import 'package:pointycastle/digests/sha256.dart';
 import 'package:pointycastle/ecc/curves/secp256k1.dart';
 import 'package:http/http.dart' as http;
 import 'package:bit_rupee/config/Config.dart';
+import 'package:bit_rupee/views/test.dart';
+// import 'package:asn1lib/asn1lib.dart';
+// import 'dart:typed_data';
+// import 'package:cryptography/cryptography.dart' as Crpto ;
+
 class Signup extends StatefulWidget {
   @override
   _SignupState createState() => _SignupState();
@@ -19,6 +25,23 @@ class _SignupState extends State<Signup> {
   final _formKey = GlobalKey<FormState>();
   String _cnic = '';
   late String _secretKey = '';
+  void saveCertificateFiles(Uint8List certificateBytes, String saveDirectory) {
+    final directory = Directory(saveDirectory);
+    if (!directory.existsSync()) {
+      directory.createSync(recursive: true);
+    }
+
+    final cerFile = File('${directory.path}/self_signed_certificate.cer');
+    final pemFile = File('${directory.path}/self_signed_certificate.pem');
+
+    final pemCertificate = base64.encode(certificateBytes);
+    final pemString = '''-----BEGIN CERTIFICATE-----
+$pemCertificate
+-----END CERTIFICATE-----''';
+
+    cerFile.writeAsBytesSync(certificateBytes);
+    pemFile.writeAsStringSync(pemString);
+  }
 
   Future<void> makeApiRequest(
       Uint8List publicKey, Uint8List signature, Uint8List messageBytes) async {
@@ -170,7 +193,7 @@ class _SignupState extends State<Signup> {
                       Uint8List privateKey =
                           generatePrivateKey(_cnic, _secretKey);
                       print('Private Key: 0x${hex.encode(privateKey)}');
-
+                      // generatePrivateKey2();
                       Uint8List publicKey =
                           generatePublicKey(privateKey).Q!.getEncoded(true);
                       print('Public Key: 0x${hex.encode(publicKey)}');
@@ -178,7 +201,17 @@ class _SignupState extends State<Signup> {
                       // 'Public Key: 0x${Uint8List.fromList(publicKey).toSet()}');
                       // print('Public Key: ${publicKey}');
                       // print('Public Key: ${publicKey.length}');
+                      print(hex.encode(generateSelfSignedCertificate(
+                          privateKey, publicKey)));
+                      // final certificateBytes =
+                      //     generateSelfSignedCertificate(privateKey, publicKey);
 
+                      // // Specify the directory to save certificate files
+                      // final saveDirectory = 'D:';
+
+                      // saveCertificateFiles(certificateBytes, saveDirectory);
+
+                      // print("Certificate files saved.");
                       String message = "hassan";
                       Uint8List messageBytes =
                           Uint8List.fromList(message.codeUnits);
@@ -336,4 +369,127 @@ class _SignupState extends State<Signup> {
     }
     return result;
   }
+//  Future<X509Certificate> generateSelfSignedCertificate(
+//     Uint8List privateKeyBytes, String commonName) async {
+//   // Create an X509CertificateBuilder object
+//   X509CertificateBuilder builder = X509CertificateBuilder();
+
+//   // Set the certificate version
+//   builder.setVersion(X509Version.v3);
+
+//   // Set the serial number
+//   builder.setSerialNumber(BigInt.from(DateTime.now().microsecondsSinceEpoch));
+
+//   // Set the issuer name
+//   builder.setIssuer(X509Name.fromList([
+//     X509NameEntry(X509NameEntry.commonName, commonName),
+//     X509NameEntry(X509NameEntry.countryName, "US"),
+//     X509NameEntry(X509NameEntry.organizationName, "My Organization"),
+//     X509NameEntry(X509NameEntry.organizationalUnitName, "My Unit"),
+//   ]);
+
+//   // Set the subject name
+//   builder.setSubject(X509Name.fromList([
+//     X509NameEntry(X509NameEntry.commonName, commonName),
+//     X509NameEntry(X509NameEntry.countryName, "US"),
+//     X509NameEntry(X509NameEntry.organizationName, "My Organization"),
+//     X509NameEntry(X509NameEntry.organizationalUnitName, "My Unit"),
+//   ]);
+
+//   // Set the public key
+//   builder.setPublicKey(ECPublicKey.fromBytes(privateKeyBytes));
+
+//   // Set the validity period
+//   builder.setNotBefore(DateTime.now());
+//   builder.setNotAfter(DateTime.now().add(Duration(days: 365)));
+
+//   // Sign the certificate with the private key
+//   X509Certificate certificate = await builder.build(privateKeyBytes);
+
+//   // Return the certificate
+//   return certificate;
+// }
+// Uint8List generateSelfSignedCertificate(Uint8List privateKeyBytes, Uint8List publicKeyBytes) {
+//   final publicAsn1 = ASN1ObjectIdentifier.fromBytes(publicKeyBytes);
+
+//   final publicKey = ASN1BitString(Uint8List.fromList(publicAsn1.encodedBytes));
+
+//   final privateAsn1 = ASN1ObjectIdentifier.fromBytes(privateKeyBytes);
+//   final privateKey = ASN1OctetString(Uint8List.fromList(privateAsn1.encodedBytes));
+
+//   final cert = ASN1Sequence()
+//     ..add(ASN1Integer(BigInt.from(1)))  // Serial number
+//     ..add(ASN1Sequence()
+//       ..add(ASN1ObjectIdentifier.fromBytes([2, 5, 4, 6]))  // OID for "C"
+//       ..add(ASN1PrintableString("US")))  // Country code
+//     // Add other fields as needed
+//     ..add(publicKey)  // Public key
+//     ..add(privateKey);  // Private key
+
+//   return cert.encodedBytes;
+// }
+//  S code
+// X509Certificate generateSelfSignedCertificate(
+//     BigInt serialNumber, ECPublicKey publicKey, ECPrivateKey privateKey) {
+//   // Create a subject distinguished name
+//   var subject  = X509Subject(
+//     country: 'Pak',
+//     designation: 'The warriers of care pvt. ltd',
+//     locality: 'Islamabad',
+//     address: 'I93',
+//     email: 'asif.mehmood@carepvtled.com',
+//   );
+//    DateTime now = DateTime.now();
+
+//   // Calculate a date one year ahead of now
+//   DateTime calAfter = now.add(Duration(days: 365));
+
+//   // Calculate a date one year before now
+//   DateTime calBefore = now.subtract(Duration(days: 365));
+
+//   // Create the ECDSA signer
+//   Uint8List ecdsaSigner = signMessage(privateKey as Uint8List, publicKey as Uint8List);
+
+// //built a certificate
+
+// return X509Certificate;
+// }
+
+// bool verifyCertificate(Uint8List certificateBytes, Uint8List trustedPublicKeyBytes) {
+//   final sequence = ASN1Parser(certificateBytes).nextObject() as ASN1Sequence;
+
+//   final tbsCertificate = sequence.elements[0] as ASN1Sequence;
+//   final signatureAlgorithm = sequence.elements[1] as ASN1Sequence;
+//   final signatureValueBitString = sequence.elements[2] as ASN1BitString;
+
+//   final publicKeyBitString = tbsCertificate.elements[6] as ASN1BitString;
+//   final publicKeyBytes = publicKeyBitString.contentBytes;
+
+//   final verifier = Signer("SHA-256/ECDSA");
+//   verifier.init(false, PublicKeyParameter<ECPublicKey>(ECPoint.fromBytes(publicKeyBytes).Q));
+
+//   final hash = SHA256Digest().process(certificateBytes.sublist(0, certificateBytes.length - signatureValueBitString.contentBytes.length));
+
+//   try {
+//     return verifier.verifySignature(hash, ECSignature(signatureValueBitString.contentBytes));
+//   } catch (e) {
+//     return false;
+//   }
+// }
 }
+// class X509Subject {
+//   final String country;
+//   final String designation;
+//   final String locality;
+//   final String address;
+//   final String email;
+
+//   X509Subject({
+//     required this.country,
+//     required this.designation,
+//     required this.locality,
+//     required this.address,
+//     required this.email,
+// }
+// );
+// }
