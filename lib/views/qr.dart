@@ -14,7 +14,7 @@ class _QRScreenState extends State<QRScreen> {
   QRViewController? scannerController;
   bool isScanning = false;
 
-  String get qrData => 'Sample QR Code Data';
+  String get qrData => 'QR Code Data';
 
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
