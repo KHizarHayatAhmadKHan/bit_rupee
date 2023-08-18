@@ -8,8 +8,9 @@ import 'package:bit_rupee/views/QR.dart';
 // import 'package:bit_rupee/views/qr.dart';
 import 'package:flutter/material.dart';
 
+import 'KYC/kyc.dart';
+
 void main() async {
-  
   runApp(const MyApp());
 }
 
@@ -132,7 +133,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // color: Colors.grey,
 
-      home: Home(),
+      home: KYC_Form(),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: _onGenerateRoute,
     );
