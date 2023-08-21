@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:bit_rupee/config/Config.dart';
 
-
-
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -106,8 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                       _formKey.currentState!.save();
 
                       try {
-                        final response = await http.get(Uri.parse('${Config.backendEndpoint}/wutxo/$_id'));
-                            
+                        final response = await http.get(
+                            Uri.parse('${Config.backendEndpoint}/wutxo/$_id'));
 
                         if (response.statusCode == 200) {
                           final responseData = json.decode(response.body);
@@ -124,13 +122,11 @@ class _LoginPageState extends State<LoginPage> {
                                 'balance': responseData['balance'],
                               },
                             );
-                            // String userId = _id;
-                            // String baseUrl =
-                            //     'http://172.16.2.65:8080/bitrupee/api/wutxo/$_id';
+
                             // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
-                            //     builder: (context) => QRScreen(),
+                            //     builder: (context) => KYC_Form(),
                             //   ),
                             // );
                           } else {
