@@ -93,7 +93,30 @@ class _KYC_FormState extends State<KYC_Form> {
     'Other'
   ];
 
+  String _selectedCountry = 'United States';
+
+  final List<String> _country = [
+    'United States',
+    'Pakistan',
+    'United Kingdom',
+    'Canada',
+    'Australia',
+    'Other'
+  ];
+
   Map<String, bool> _checkBoxValues = {
+    'Passport': false,
+    'Driving License': false,
+    'Registered Lease': false,
+    'Latest Telephone Bill': false,
+    'Latest Gas Bill': false,
+    'Latest Electricity Bill': false,
+    'Ration Card': false,
+    'Voter Identity Card': false,
+    'Latest Bank Account Statement/Passbook': false,
+  };
+
+  Map<String, bool> _AddressProof = {
     'Passport': false,
     'Driving License': false,
     'Registered Lease': false,
@@ -639,13 +662,13 @@ class _KYC_FormState extends State<KYC_Form> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: DropdownButton<String>(
-                            value: _selectedNationality,
+                            value: _selectedCountry,
                             onChanged: (String? newValue) {
                               setState(() {
-                                _selectedNationality = newValue!;
+                                _selectedCountry = newValue!;
                               });
                             },
-                            items: _nationalities
+                            items: _country
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -1034,13 +1057,13 @@ class _KYC_FormState extends State<KYC_Form> {
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: _checkBoxValues.keys.map((String label) {
+              children: _AddressProof.keys.map((String label) {
                 return CheckboxListTile(
                   title: Text(label),
-                  value: _checkBoxValues[label],
+                  value: _AddressProof[label],
                   onChanged: (bool? newValue) {
                     setState(() {
-                      _checkBoxValues[label] = newValue!;
+                      _AddressProof[label] = newValue!;
                     });
                   },
                 );

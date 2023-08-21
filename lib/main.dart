@@ -5,10 +5,7 @@ import 'package:bit_rupee/views/Signup_page.dart';
 import 'package:bit_rupee/views/Wallet.dart';
 import 'package:bit_rupee/views/landingpage.dart';
 import 'package:bit_rupee/views/QR.dart';
-// import 'package:bit_rupee/views/qr.dart';
 import 'package:flutter/material.dart';
-
-import 'KYC/kyc.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -89,22 +86,6 @@ class MyApp extends StatelessWidget {
           builder: (context) => LoginPage(),
         );
 
-      // case '/QRScannerScreen':
-      //   final Map<String, dynamic>? arguments =
-      //       settings.arguments as Map<String, dynamic>?;
-
-      //   if (arguments != null && arguments.containsKey('id')) {
-      //     return MaterialPageRoute(
-      //       builder: (context) => QRScannerScreen(
-      //         id: arguments['id'],
-      //       ),
-      //     );
-      //   }
-
-      //   return MaterialPageRoute(
-      //     builder: (context) => LoginPage(),
-      //   );
-
       case '/QRScreen':
         final Map<String, dynamic>? arguments =
             settings.arguments as Map<String, dynamic>?;
@@ -133,7 +114,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // color: Colors.grey,
 
-      home: KYC_Form(),
+      home: Home(),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: _onGenerateRoute,
     );
