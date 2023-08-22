@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:bit_rupee/config/Config.dart';
+
 class QRScreen extends StatefulWidget {
   @override
   _QRScreenState createState() => _QRScreenState();
@@ -28,21 +29,21 @@ class _QRScreenState extends State<QRScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Send/ Recieve Money",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w300,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.wallet, color: Colors.grey),
+            icon: const Icon(Icons.wallet, color: Colors.white),
             onPressed: () {},
           ),
         ],
-        backgroundColor: Color.fromARGB(255, 248, 250, 248),
+        backgroundColor: const Color.fromARGB(255, 85, 209, 89),
         centerTitle: true,
       ),
       body: Center(

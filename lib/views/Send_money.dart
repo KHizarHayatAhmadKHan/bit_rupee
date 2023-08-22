@@ -4,6 +4,32 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:bit_rupee/config/Config.dart';
 
+class NotificationData {
+  final String title;
+  final String message;
+  final DateTime timestamp;
+
+  NotificationData({
+    required this.title,
+    required this.message,
+    required this.timestamp,
+  });
+}
+
+class NotificationCenter {
+  static List<NotificationData> notifications = [];
+
+  static void addNotification(NotificationData notification) {
+    notifications.add(notification);
+  }
+
+  static void removeNotification(int index) {
+    if (index >= 0 && index < notifications.length) {
+      notifications.removeAt(index);
+    }
+  }
+}
+
 class send_money extends StatefulWidget {
   final int senderId;
   final String walletaddress;
@@ -42,9 +68,14 @@ class _SendMoneyState extends State<send_money> {
                 duration: Duration(seconds: 2),
               ),
             );
-
             await Future.delayed(Duration(seconds: 3));
             Navigator.pop(context);
+
+            NotificationCenter.addNotification(NotificationData(
+              title: 'Money Transferred',
+              message: 'Amount: $_amount',
+              timestamp: DateTime.now(),
+            ));
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -52,6 +83,11 @@ class _SendMoneyState extends State<send_money> {
                 duration: Duration(seconds: 2),
               ),
             );
+            NotificationCenter.addNotification(NotificationData(
+              title: 'Money Transfer Failed',
+              message: 'Please try again.',
+              timestamp: DateTime.now(),
+            ));
             await Future.delayed(Duration(seconds: 1));
             Navigator.pop(context);
           }
