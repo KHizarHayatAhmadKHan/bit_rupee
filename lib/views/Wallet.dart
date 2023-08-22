@@ -6,7 +6,7 @@ import 'package:bit_rupee/config/Config.dart';
 class Wallet extends StatefulWidget {
   final int id;
   final String walletaddress;
-  late int balance; // final changed to late.
+  late int balance; 
 
   Wallet({
     required this.id,

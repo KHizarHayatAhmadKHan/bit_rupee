@@ -1,5 +1,6 @@
 import 'package:bit_rupee/views/Home_page.dart';
 import 'package:bit_rupee/views/Login_page.dart';
+import 'package:bit_rupee/views/Profile.dart';
 import 'package:bit_rupee/views/Send_money.dart';
 import 'package:bit_rupee/views/Signup_page.dart';
 import 'package:bit_rupee/views/Wallet.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(
           builder: (context) => Signup(),
         );
+
       case '/landing':
         final Map<String, dynamic>? arguments =
             settings.arguments as Map<String, dynamic>?;
@@ -94,6 +96,23 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (context) => QRScreen(
               id: arguments['id'],
+            ),
+          );
+        }
+
+        return MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        );
+
+      case '/Profile':
+        final Map<String, dynamic>? arguments =
+            settings.arguments as Map<String, dynamic>?;
+
+        if (arguments != null && arguments.containsKey('id')) {
+          return MaterialPageRoute(
+            builder: (context) => Profile(
+              id: arguments['id'],
+              walletaddress: arguments['walletaddress'],
             ),
           );
         }

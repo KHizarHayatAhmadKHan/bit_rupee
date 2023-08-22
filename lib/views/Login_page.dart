@@ -34,6 +34,12 @@ class _LoginPageState extends State<LoginPage> {
         ],
         backgroundColor: const Color.fromARGB(255, 85, 209, 89),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, '/Home');
+          },
+        ),
       ),
       body: Container(
         width: double.infinity,
@@ -122,7 +128,6 @@ class _LoginPageState extends State<LoginPage> {
                                 'balance': responseData['balance'],
                               },
                             );
-
                             // Navigator.push(
                             //   context,
                             //   MaterialPageRoute(
