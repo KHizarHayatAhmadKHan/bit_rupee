@@ -10,6 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:bit_rupee/config/Config.dart';
 import 'package:bit_rupee/views/test.dart';
+import 'package:pointycastle/ecc/api.dart';
+import 'package:pointycastle/ecc/curves/secp256r1.dart';
 // import 'package:asn1lib/asn1lib.dart';
 // import 'dart:typed_data';
 // import 'package:cryptography/cryptography.dart' as Crpto ;
@@ -199,7 +201,7 @@ $pemCertificate
                       // 'Public Key: 0x${Uint8List.fromList(publicKey).toSet()}');
                       // print('Public Key: ${publicKey}');
                       // print('Public Key: ${publicKey.length}');
-                      print(hex.encode(generateSelfSignedCertificate(
+                      print('Certificate '+hex.encode(generateSelfSignedCertificate(
                           privateKey, publicKey)));
                       // final certificateBytes =
                       //     generateSelfSignedCertificate(privateKey, publicKey);
@@ -223,11 +225,25 @@ $pemCertificate
                       // print('Signature: ${signature}');
                       // print('Signature: ${signature.length}');
                       bool isSignatureValid =
-                          verifySignature(publicKey, messageBytes, signature);
+                          VerifySignature(publicKey, messageBytes, signature);
                       print(
                           'Signature Verification in DART: $isSignatureValid');
 
                       makeApiRequest(publicKey, signature, messageBytes);
+
+                      ECPublicKey bytesToPublicKey(Uint8List publicKeyBytes) {
+                        final curve =
+                            ECCurve_secp256r1(); // Use the appropriate curve
+                        final ecPoint = curve.curve.decodePoint(publicKeyBytes);
+
+                        return ECPublicKey(ecPoint, curve);
+                      }
+
+                      // bool iscertificateValid = verifySelfSignedCertificate(
+                      //     generateSelfSignedCertificate(privateKey, publicKey),
+                      //    generatePublicKey(privateKey));
+
+                      //     print('Certificate is: $iscertificateValid');
                     }
                   },
                   style: ButtonStyle(
@@ -258,13 +274,7 @@ $pemCertificate
     );
   }
 
-
-
-
-
- 
-  
-// 
+//
 //  Future<X509Certificate> generateSelfSignedCertificate(
 //     Uint8List privateKeyBytes, String commonName) async {
 //   // Create an X509CertificateBuilder object
