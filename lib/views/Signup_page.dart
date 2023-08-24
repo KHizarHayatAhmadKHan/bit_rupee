@@ -12,6 +12,8 @@ import 'package:bit_rupee/config/Config.dart';
 import 'package:bit_rupee/views/test.dart';
 import 'package:pointycastle/ecc/api.dart';
 import 'package:pointycastle/ecc/curves/secp256r1.dart';
+
+import '../crypto/verifyCertificate.dart';
 // import 'package:asn1lib/asn1lib.dart';
 // import 'dart:typed_data';
 // import 'package:cryptography/cryptography.dart' as Crpto ;
@@ -201,8 +203,20 @@ $pemCertificate
                       // 'Public Key: 0x${Uint8List.fromList(publicKey).toSet()}');
                       // print('Public Key: ${publicKey}');
                       // print('Public Key: ${publicKey.length}');
-                      print('Certificate '+hex.encode(generateSelfSignedCertificate(
-                          privateKey, publicKey)));
+                      print('Certificate ' +
+                          hex.encode(generateSelfSignedCertificate(
+                              privateKey, publicKey)));
+                      final certificateBytes =
+                          generateSelfSignedCertificate(privateKey, publicKey);
+                      final isCertificateValid =
+                          verifyCertificate(certificateBytes);
+
+                      if (isCertificateValid) {
+                        print("The certificate is valid.");
+                      } else {
+                        print("The certificate is NOT valid.");
+                      }
+                      // print('Certificate ' +
                       // final certificateBytes =
                       //     generateSelfSignedCertificate(privateKey, publicKey);
 

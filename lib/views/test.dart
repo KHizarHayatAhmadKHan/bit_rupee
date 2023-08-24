@@ -100,7 +100,6 @@
 //   return certificate;
 // }
 
-import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:asn1lib/asn1lib.dart';
@@ -110,9 +109,6 @@ import 'package:pointycastle/ecc/api.dart';
 import 'package:pointycastle/ecc/curves/secp256r1.dart';
 import 'package:pointycastle/macs/hmac.dart';
 import 'package:pointycastle/signers/ecdsa_signer.dart';
-
-
-
 
 Uint8List generateSelfSignedCertificate(
     Uint8List privateKeyBytes, Uint8List publicKeyBytes) {
@@ -129,15 +125,53 @@ Uint8List generateSelfSignedCertificate(
     ..add(ASN1Sequence()
       ..add(
           ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
-      ..add(ASN1PrintableString("US"))) // Country code
-    // Add other fields as needed
-    ..add(publicKey) // Public key
-    ..add(privateKey); // Private key
+      ..add(ASN1PrintableString("PK"))) // Country code
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("ICT"))) // state or province
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("ISL"))) // locality
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("CARE"))) // organization
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("LOGIN"))) // organization unit
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("bitrupee"))) // common name
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("US"))) // email
+
+    ..add(ASN1Sequence()
+      ..add(ASN1UtcTime(DateTime.now())) // Not before
+      ..add(ASN1UtcTime(DateTime.now().add(Duration(days: 365))))) // Not after
+
+    ..add(ASN1Sequence()
+      ..add(ASN1ObjectIdentifier(Uint8List.fromList(
+          [1, 2, 840, 10045, 2, 1]))) // OID for EC public key
+      ..add(publicKey)) // Public key
+    ..add(ASN1Sequence()
+      ..add(ASN1ObjectIdentifier(Uint8List.fromList(
+          [1, 2, 840, 10045, 3, 1, 7]))) // OID for EC private key
+      ..add(privateKey)); // Private key
 
   return cert.encodedBytes;
 }
-
-
 
 // Uint8List intToBytes(int value, int length) {
 //   final result = Uint8List(length);
@@ -179,7 +213,7 @@ Uint8List generateSelfSignedCertificate(
 //  Uint8List publicKeyToBytes(ECPublicKey publicKey) {
 //   final ecPoint = publicKey.Q;
 //   final ecPointBytes = ecPoint!.getEncoded(false);
-  
+
 //   // Assuming uncompressed point format, ecPointBytes contains X and Y coordinates
 //   return ecPointBytes;
 // }
@@ -190,9 +224,6 @@ Uint8List generateSelfSignedCertificate(
 //     return false;
 //   }
 // }
-
-
-
 
 // Uint8List intToBytes(int value, int length) {
 //   final result = Uint8List(length);
