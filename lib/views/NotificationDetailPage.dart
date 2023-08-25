@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'Send_money.dart';
 
 class NotificationDetailPage extends StatefulWidget {
@@ -18,7 +17,7 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(milliseconds: 90), () {
       setState(() {
         showCircle = true;
       });
@@ -37,12 +36,6 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.wallet, color: Colors.white),
-            onPressed: () {},
-          ),
-        ],
         backgroundColor: const Color.fromARGB(255, 85, 209, 89),
         centerTitle: true,
       ),
@@ -97,13 +90,4 @@ class _AnimatedCircleState extends State<AnimatedCircle> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: NotificationDetailPage(
-      notification:
-          NotificationData(title: '', message: '', timestamp: DateTime.now()),
-    ),
-  ));
 }
