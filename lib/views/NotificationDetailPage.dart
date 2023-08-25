@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'Send_money.dart';
 
 class NotificationDetailPage extends StatefulWidget {
