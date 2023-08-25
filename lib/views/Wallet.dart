@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:bit_rupee/config/Config.dart';
+
+// ignore: must_be_immutable
 class Wallet extends StatefulWidget {
   final int id;
   final String walletaddress;
-  late int balance; 
+  late int balance;
 
   Wallet({
     required this.id,
@@ -29,22 +31,19 @@ class _WalletState extends State<Wallet> {
 
   Future<void> fetchDataAndUpdateData() async {
     try {
-      final response = await http.get(
-          Uri.parse('${Config.backendEndpoint}/wutxo/${widget.id}'));
+      final response = await http
+          .get(Uri.parse('${Config.backendEndpoint}/wutxo/${widget.id}'));
 
       // Parse the response and update the state with the fetched data
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         setState(() {
-          // Update 'data' using the fetched data, assuming the response data structure is Map<String, dynamic>
-          // For example: data = responseData['data'];
           widget.balance = responseData['balance'];
         });
       } else {
         throw Exception('Failed to fetch data');
       }
     } catch (e) {
-      // Handle any errors, e.g., show an error message to the user
       print('Error fetching data: $e');
     }
   }

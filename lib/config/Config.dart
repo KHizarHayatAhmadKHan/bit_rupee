@@ -1,3 +1,3 @@
 class Config {
-  static const String backendEndpoint = 'http://172.16.2.151:8080/bitrupee/api';
+  static const String backendEndpoint = 'http://172.16.2.205:8080/bitrupee/api';
 }

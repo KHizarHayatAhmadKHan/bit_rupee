@@ -1,10 +1,9 @@
 import 'package:bit_rupee/views/Wallet.dart';
 import 'package:bit_rupee/views/notification.dart';
 import 'package:bit_rupee/views/QR.dart';
-// import 'package:bit_rupee/views/qr.dart';
 import 'package:bit_rupee/views/settings.dart';
 import 'package:flutter/material.dart';
-
+import 'Send_money.dart';
 import 'explore.dart';
 
 class landingpage extends StatefulWidget {
@@ -24,12 +23,11 @@ class landingpage extends StatefulWidget {
 
 class _landingpageState extends State<landingpage> {
   int _currentIndex = 0;
-  late List<Widget> _screens; // Declare the _screens list
+  late List<Widget> _screens; 
 
   @override
   void initState() {
     super.initState();
-    // Initialize the _screens list in the initState where you have access to widget properties
     _screens = [
       Wallet(
           id: widget.id,
@@ -80,6 +78,7 @@ class _landingpageState extends State<landingpage> {
 
   Widget buildNavBarItem(IconData iconData, String title, int index) {
     final isSelected = _currentIndex == index;
+     int notificationCount = NotificationCenter.notifications.length;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -88,13 +87,38 @@ class _landingpageState extends State<landingpage> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-        child: Row(
-          children: [
-            Icon(iconData,
-                size: 30, color: isSelected ? Colors.green : Colors.black),
-            // SizedBox(width: 8),
-          ],
-        ),
+        child: Stack(
+        children: [
+          Icon(
+            iconData,
+            size: 30,
+            color: isSelected ? Colors.green : Colors.black,
+          ),
+          if (index == 3 && notificationCount > 0) // Show badge only for "Notification" icon
+            Positioned(
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.red,
+                ),
+                constraints: BoxConstraints(
+                  minWidth: 16,
+                  minHeight: 16,
+                ),
+                child: Text(
+                  '$notificationCount',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+        ],
+      ),
       ),
     );
   }

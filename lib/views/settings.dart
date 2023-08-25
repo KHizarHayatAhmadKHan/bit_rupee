@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../config/Config.dart';
 
 class settings extends StatefulWidget {
   final int id;
@@ -18,25 +15,6 @@ class settings extends StatefulWidget {
 
 class _SettingsState extends State<settings> {
   double userid = 0.0;
-
-  Future<void> fetchDataAndUpdateData() async {
-    try {
-      final response = await http
-          .get(Uri.parse('${Config.backendEndpoint}/wutxo/${widget.id}'));
-
-      // Parse the response and update the state with the fetched data
-      if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-        setState(() {
-          userid = responseData['id'];
-        });
-      } else {
-        throw Exception('Failed to fetch data');
-      }
-    } catch (e) {
-      print('Error fetching data: $e');
-    }
-  }
 
   Future<void> logoutUser() async {
     // Clear user data from SharedPreferences
@@ -82,15 +60,21 @@ class _SettingsState extends State<settings> {
                       'walletaddress': widget.walletaddress,
                     });
                   },
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Your Profile',
-                      style: TextStyle(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.person,
                         color: Colors.black,
-                        fontSize: 16,
                       ),
-                    ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Your Profile',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -101,16 +85,22 @@ class _SettingsState extends State<settings> {
               child: Container(
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: fetchDataAndUpdateData,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Settings',
-                      style: TextStyle(
+                  onPressed: () {},
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.settings,
                         color: Colors.black,
-                        fontSize: 16,
                       ),
-                    ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Settings',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -122,15 +112,21 @@ class _SettingsState extends State<settings> {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: logoutUser,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Logout',
-                      style: TextStyle(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.logout,
                         color: Colors.black,
-                        fontSize: 16,
                       ),
-                    ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Logout',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
