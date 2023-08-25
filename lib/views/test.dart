@@ -103,6 +103,12 @@
 import 'dart:typed_data';
 
 import 'package:asn1lib/asn1lib.dart';
+import 'package:bit_rupee/crypto/verifySignature.dart';
+import 'package:pointycastle/api.dart';
+import 'package:pointycastle/ecc/api.dart';
+import 'package:pointycastle/ecc/curves/secp256r1.dart';
+import 'package:pointycastle/macs/hmac.dart';
+import 'package:pointycastle/signers/ecdsa_signer.dart';
 
 Uint8List generateSelfSignedCertificate(
     Uint8List privateKeyBytes, Uint8List publicKeyBytes) {
@@ -119,10 +125,136 @@ Uint8List generateSelfSignedCertificate(
     ..add(ASN1Sequence()
       ..add(
           ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
-      ..add(ASN1PrintableString("US"))) // Country code
-    // Add other fields as needed
-    ..add(publicKey) // Public key
-    ..add(privateKey); // Private key
+      ..add(ASN1PrintableString("PK"))) // Country code
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("ICT"))) // state or province
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("ISL"))) // locality
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("CARE"))) // organization
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("LOGIN"))) // organization unit
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("bitrupee"))) // common name
+
+    ..add(ASN1Sequence()
+      ..add(
+          ASN1ObjectIdentifier(Uint8List.fromList([5, 5, 4, 6]))) // OID for "C"
+      ..add(ASN1PrintableString("US"))) // email
+
+    ..add(ASN1Sequence()
+      ..add(ASN1UtcTime(DateTime.now())) // Not before
+      ..add(ASN1UtcTime(DateTime.now().add(Duration(days: 365))))) // Not after
+
+    ..add(ASN1Sequence()
+      ..add(ASN1ObjectIdentifier(Uint8List.fromList(
+          [1, 2, 840, 10045, 2, 1]))) // OID for EC public key
+      ..add(publicKey)) // Public key
+    ..add(ASN1Sequence()
+      ..add(ASN1ObjectIdentifier(Uint8List.fromList(
+          [1, 2, 840, 10045, 3, 1, 7]))) // OID for EC private key
+      ..add(privateKey)); // Private key
 
   return cert.encodedBytes;
 }
+
+// Uint8List intToBytes(int value, int length) {
+//   final result = Uint8List(length);
+//   for (var i = length - 1; i >= 0; i--) {
+//     result[i] = value & 0xff;
+//     value >>= 8;
+//   }
+//   return result;
+// }
+
+// bool verifySelfSignedCertificate(Uint8List certificateBytes,Uint8List message, Uint8List signatureBytes) {
+//   try {
+//     final decodedCert = ASN1Parser(certificateBytes).nextObject() as ASN1Sequence;
+
+//     final publicKeyBitString = decodedCert.elements[6] as ASN1BitString;
+//     final decodedPublicKey = ASN1Parser(publicKeyBitString.contentBytes()).nextObject() as ASN1Sequence;
+
+//     final x = (decodedPublicKey.elements[0] as ASN1Integer).intValue;
+//     final y = (decodedPublicKey.elements[1] as ASN1Integer).intValue;
+
+//     final curve = ECCurve_secp256r1();
+//     final ecPoint = curve.curve.decodePoint(Uint8List.fromList([0x04] + intToBytes(x, 32) + intToBytes(y, 32)));
+
+//     final publicKey = ECPublicKey(
+//       ecPoint,
+//       curve // Use the appropriate curve for your certificate
+//     );
+
+//     final signatureBitString = decodedCert.elements[2] as ASN1BitString;
+//     final signatureBytes = signatureBitString.contentBytes();
+// final derParser = ASN1Parser(signatureBytes);
+//     final derSequence = derParser.nextObject() as ASN1Sequence;
+//     final r = (derSequence.elements[0] as ASN1Integer).intValue;
+//     final s = (derSequence.elements[1] as ASN1Integer).intValue;
+
+//     final signature = ECSignature(BigInt.parse(r.toString()), BigInt.parse(s.toString()));
+// //l verifySignature(
+//    //   Uint8List publicKeyBytes, Uint8List message, Uint8List signatureBytes)
+//  Uint8List publicKeyToBytes(ECPublicKey publicKey) {
+//   final ecPoint = publicKey.Q;
+//   final ecPointBytes = ecPoint!.getEncoded(false);
+
+//   // Assuming uncompressed point format, ecPointBytes contains X and Y coordinates
+//   return ecPointBytes;
+// }
+//     final verifier = VerifySignature( publicKeyToBytes(publicKey), message, signatureBytes);
+//     return verifier;
+//   } catch (e) {
+//     print("Error verifying certificate: $e");
+//     return false;
+//   }
+// }
+
+// Uint8List intToBytes(int value, int length) {
+//   final result = Uint8List(length);
+//   for (var i = length - 1; i >= 0; i--) {
+//     result[i] = value & 0xff;
+//     value >>= 8;
+//   }
+//   return result;
+// }
+
+// bool verifySelfSignedCertificate(Uint8List certificateBytes, ECPublicKey publicKey) {
+//   try {
+//     final decodedCert = ASN1Parser(certificateBytes).nextObject() as ASN1Sequence;
+
+//     final signatureBitString = decodedCert.elements[2] as ASN1BitString;
+//     final signatureBytes = signatureBitString.contentBytes();
+
+//     // Decode DER encoded signature
+//     final derParser = ASN1Parser(signatureBytes);
+//     final derSequence = derParser.nextObject() as ASN1Sequence;
+//     final r = (derSequence.elements[0] as ASN1Integer).intValue;
+//     final s = (derSequence.elements[1] as ASN1Integer).intValue;
+
+//     final signature = ECSignature(BigInt.parse(r.toString()), BigInt.parse(s.toString()));
+
+//     final signer = ECDSASigner(null, HMac(Digest("SHA-256"), 64));
+//     signer.init(false, PublicKeyParameter<ECPublicKey>(publicKey));
+
+//     return signer.verifySignature(Uint8List.fromList(signatureBytes), signature);
+//   } catch (e) {
+//     print("Error verifying certificate: $e");
+//     return false;
+//   }
+// }

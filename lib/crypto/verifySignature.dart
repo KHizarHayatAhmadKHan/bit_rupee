@@ -7,7 +7,7 @@ import 'package:pointycastle/ecc/curves/secp256k1.dart';
 import 'package:pointycastle/macs/hmac.dart';
 import 'package:pointycastle/signers/ecdsa_signer.dart';
 
-bool verifySignature(
+bool VerifySignature(
       Uint8List publicKeyBytes, Uint8List message, Uint8List signatureBytes) {
     ECCurve_secp256k1 curve = ECCurve_secp256k1();
     ECPublicKey publicKey =
