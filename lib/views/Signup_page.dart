@@ -24,9 +24,13 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+
   final _formKey = GlobalKey<FormState>();
   String _cnic = '';
   late String _secretKey = '';
+
+  
+
   void saveCertificateFiles(Uint8List certificateBytes, String saveDirectory) {
     final directory = Directory(saveDirectory);
     if (!directory.existsSync()) {
@@ -44,6 +48,7 @@ $pemCertificate
     cerFile.writeAsBytesSync(certificateBytes);
     pemFile.writeAsStringSync(pemString);
   }
+  
 
   Future<void> makeApiRequest(
       Uint8List publicKey, Uint8List signature, Uint8List messageBytes) async {
@@ -199,23 +204,25 @@ $pemCertificate
                       Uint8List publicKey =
                           generatePublicKey(privateKey).Q!.getEncoded(true);
                       print('Public Key: 0x${hex.encode(publicKey)}');
+
+
                       // print(
                       // 'Public Key: 0x${Uint8List.fromList(publicKey).toSet()}');
                       // print('Public Key: ${publicKey}');
                       // print('Public Key: ${publicKey.length}');
-                      print('Certificate ' +
-                          hex.encode(generateSelfSignedCertificate(
-                              privateKey, publicKey)));
-                      final certificateBytes =
-                          generateSelfSignedCertificate(privateKey, publicKey);
-                      final isCertificateValid =
-                          verifyCertificate(certificateBytes);
+                      // print('Certificate ' +
+                      //     hex.encode(generateSelfSignedCertificate(
+                      //         privateKey, publicKey)));
+                      // final certificateBytes =
+                      //     generateSelfSignedCertificate(privateKey, publicKey);
+                      // final isCertificateValid =
+                      //     verifyCertificate(certificateBytes);
 
-                      if (isCertificateValid) {
-                        print("The certificate is valid.");
-                      } else {
-                        print("The certificate is NOT valid.");
-                      }
+                      // if (isCertificateValid) {
+                      //   print("The certificate is valid.");
+                      // } else {
+                      //   print("The certificate is NOT valid.");
+                      // }
                       // print('Certificate ' +
                       // final certificateBytes =
                       //     generateSelfSignedCertificate(privateKey, publicKey);
