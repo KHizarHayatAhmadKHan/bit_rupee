@@ -4,7 +4,6 @@ import 'package:bit_rupee/views/QR.dart';
 import 'package:bit_rupee/views/settings.dart';
 import 'package:flutter/material.dart';
 import 'Send_money.dart';
-import 'package:provider/provider.dart';
 import 'explore.dart';
 
 class landingpage extends StatefulWidget {
