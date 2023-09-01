@@ -1,3 +1,4 @@
+import 'package:bit_rupee/views/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,107 +32,62 @@ class _SettingsState extends State<settings> {
         title: Text(
           "Settings",
           style: TextStyle(
-            color: Colors.white,
             fontSize: 24,
             fontWeight: FontWeight.w300,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
+            icon: const Icon(
+              Icons.more_vert,
+            ),
             onPressed: () {},
           ),
         ],
-        backgroundColor: const Color.fromARGB(255, 85, 209, 89),
         centerTitle: true,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Container(
-                width: double.infinity,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Profile', arguments: {
-                      'id': widget.id,
-                      'walletaddress': widget.walletaddress,
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.person,
-                        color: Colors.black,
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Your Profile',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
+      body: ListView(
+        children: [
+          buildListTile(
+            Icons.person,
+            'Your Profile',
+            () {
+              Navigator.pushNamed(context, '/Profile', arguments: {
+                'id': widget.id,
+                'walletaddress': widget.walletaddress,
+              });
+            },
+          ),
+          buildListTile(
+            Icons.settings,
+            'Settings',
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingsPage(),
                 ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Container(
-                width: double.infinity,
-                child: TextButton(
-                  onPressed: () {},
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.settings,
-                        color: Colors.black,
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Settings',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Container(
-                width: double.infinity,
-                child: TextButton(
-                  onPressed: logoutUser,
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.logout,
-                        color: Colors.black,
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Logout',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
+              );
+            },
+          ),
+          buildListTile(
+            Icons.logout,
+            'Logout',
+            logoutUser,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildListTile(IconData icon, String title, VoidCallback onPressed) {
+    return ListTile(
+      onTap: onPressed,
+      leading: Icon(icon),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: 16,
         ),
       ),
     );

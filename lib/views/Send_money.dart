@@ -123,12 +123,12 @@ class _SendMoneyState extends State<send_money> {
             onPressed: () {},
             icon: const Icon(
               Icons.more_vert,
-              color: Colors.black,
+              // color: Colors.black,
             ),
           ),
         ],
         centerTitle: true,
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
           onPressed: () {
@@ -137,7 +137,7 @@ class _SendMoneyState extends State<send_money> {
         ),
         title: const Text(
           "Send Money",
-          style: TextStyle(color: Colors.black),
+          // style: TextStyle(color: Colors.black),
         ),
       ),
       body: Padding(
@@ -148,7 +148,7 @@ class _SendMoneyState extends State<send_money> {
             children: [
               SizedBox(),
               Icon(Icons.wallet,
-                  color: const Color.fromARGB(255, 85, 209, 89), size: 78),
+                   size: 78),
               SizedBox(
                 height: 30,
               ),
@@ -214,8 +214,7 @@ class _SendMoneyState extends State<send_money> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                           //
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color.fromARGB(255, 85, 209, 89)),
+                          
                           padding: MaterialStateProperty.all<EdgeInsets>(
                               const EdgeInsets.all(20)),
                           shape:
@@ -227,7 +226,7 @@ class _SendMoneyState extends State<send_money> {
                       child: Text(
                         'Submit',
                         style: TextStyle(
-                          color: Color.fromARGB(255, 249, 252, 249),
+                          
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),

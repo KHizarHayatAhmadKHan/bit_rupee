@@ -6,7 +6,9 @@ import 'package:bit_rupee/views/Signup_page.dart';
 import 'package:bit_rupee/views/Wallet.dart';
 import 'package:bit_rupee/views/landingpage.dart';
 import 'package:bit_rupee/views/QR.dart';
+import 'package:bit_rupee/views/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -130,12 +132,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // color: Colors.grey,
-
-      home: Home(),
-      debugShowCheckedModeBanner: false,
-      onGenerateRoute: _onGenerateRoute,
+    return ChangeNotifierProvider(
+      create: (context) => SettingsProvider(),
+      child: Consumer<SettingsProvider>(
+        builder: (context, settingsProvider, _) {
+          return MaterialApp(
+            title: 'bitRupee',
+            theme: settingsProvider.isDarkMode
+                ? ThemeData.dark()
+                : ThemeData.light(),
+            home: Home(),
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: _onGenerateRoute,
+          );
+        },
+      ),
     );
   }
 }
