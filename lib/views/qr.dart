@@ -29,21 +29,22 @@ class _QRScreenState extends State<QRScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           "Send/ Recieve Money",
           style: TextStyle(
-            
             fontSize: 24,
             fontWeight: FontWeight.w300,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.wallet, ),
+            icon: const Icon(
+              Icons.wallet,
+            ),
             onPressed: () {},
           ),
         ],
-      
         centerTitle: true,
       ),
       body: Center(
@@ -55,9 +56,9 @@ class _QRScreenState extends State<QRScreen> {
               'Please Scan the code to Send Money',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w400,
-                 ),
+                fontSize: 24,
+                fontWeight: FontWeight.w400,
+              ),
             ),
             const SizedBox(
               height: 40,
@@ -115,7 +116,6 @@ class _QRScreenState extends State<QRScreen> {
                 });
               },
               style: ButtonStyle(
-                  
                   padding: MaterialStateProperty.all<EdgeInsets>(
                       const EdgeInsets.all(20)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -125,7 +125,6 @@ class _QRScreenState extends State<QRScreen> {
               child: Text(
                 isScanning ? 'Go back' : 'Send Money',
                 style: TextStyle(
-                 
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),

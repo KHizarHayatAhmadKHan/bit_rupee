@@ -31,12 +31,10 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
         title: Text(
           "Notification Detail",
           style: TextStyle(
-            
             fontSize: 24,
             fontWeight: FontWeight.w300,
           ),
         ),
-       
         centerTitle: true,
       ),
       body: Center(

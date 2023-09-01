@@ -19,15 +19,14 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           "Notifications",
           style: TextStyle(
-           
             fontSize: 24,
             fontWeight: FontWeight.w300,
           ),
         ),
-       
         centerTitle: true,
       ),
       body: ListView.builder(
