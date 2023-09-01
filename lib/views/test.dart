@@ -77,28 +77,28 @@
 
 // // // // //   print('Key: ${aesKey.key}');
 // // // // // }
-// // // // import 'dart:io';
-// // // // import 'dart:typed_data';
-// // // // import 'package:asn1lib/asn1lib.dart';
-// // // // import 'package:cryptography/cryptography.dart';
+// // import 'dart:io';
+// // import 'dart:typed_data';
+// // import 'package:asn1lib/asn1lib.dart';
+// // import 'package:cryptography/cryptography.dart';
 
-// // // // Future<X509Certificate> generateSelfSignedCertificate(Uint8List privateKeyBytes,final publicKey) async {
-// // // //   // final publicKey = generatePublicKey(privateKeyBytes);
+// // Future<X509Certificate> generateSelfSignedCertificate(Uint8List privateKeyBytes,final publicKey) async {
+// //   // final publicKey = generatePublicKey(privateKeyBytes);
 
-// // // //   final certificate = X509Certificate  (
-// // // //     subject: X509DistinguishedName(commonName: 'Self-Signed'),
-// // // //     issuer: X509DistinguishedName(commonName: 'Self-Signed'),
-// // // //     serialNumber: DateTime.now().millisecondsSinceEpoch,
-// // // //     validity: X509Validity(
-// // // //       notBefore: DateTime.now(),
-// // // //       notAfter: DateTime.now().add(Duration(days: 365)),
-// // // //     ),
-// // // //     subjectPublicKey: await publicKey.extractRawSubjectPublicKey(),
-// // // //     issuerPrivateKey: privateKeyBytes,
-// // // //   );
+// //   final certificate = X509Certificate  (
+// //     subject: X509DistinguishedName(commonName: 'Self-Signed'),
+// //     issuer: X509DistinguishedName(commonName: 'Self-Signed'),
+// //     serialNumber: DateTime.now().millisecondsSinceEpoch,
+// //     validity: X509Validity(
+// //       notBefore: DateTime.now(),
+// //       notAfter: DateTime.now().add(Duration(days: 365)),
+// //     ),
+// //     subjectPublicKey: await publicKey.extractRawSubjectPublicKey(),
+// //     issuerPrivateKey: privateKeyBytes,
+// //   );
 
-// // // //   return certificate;
-// // // // }
+// //   return certificate;
+// // }
 
 // // // import 'dart:typed_data';
 
