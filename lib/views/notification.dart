@@ -22,12 +22,12 @@ class _NotificationPageState extends State<NotificationPage> {
         title: Text(
           "Notifications",
           style: TextStyle(
-            color: Colors.white,
+           
             fontSize: 24,
             fontWeight: FontWeight.w300,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 85, 209, 89),
+       
         centerTitle: true,
       ),
       body: ListView.builder(
@@ -55,7 +55,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 isNotificationOpened
                     ? Icons.notifications
                     : Icons.notifications_active,
-                color: isNotificationOpened ? Colors.black : Colors.green,
+                color: isNotificationOpened ? Colors.black : Colors.blue,
               ),
               title: Text(notification.title),
               subtitle: Text(notification.message),

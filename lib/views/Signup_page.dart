@@ -9,11 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:bit_rupee/config/Config.dart';
-import 'package:bit_rupee/views/test.dart';
 import 'package:pointycastle/ecc/api.dart';
 import 'package:pointycastle/ecc/curves/secp256r1.dart';
 
-import '../crypto/verifyCertificate.dart';
 // import 'package:asn1lib/asn1lib.dart';
 // import 'dart:typed_data';
 // import 'package:cryptography/cryptography.dart' as Crpto ;
@@ -24,12 +22,9 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-
   final _formKey = GlobalKey<FormState>();
   String _cnic = '';
   late String _secretKey = '';
-
-  
 
   void saveCertificateFiles(Uint8List certificateBytes, String saveDirectory) {
     final directory = Directory(saveDirectory);
@@ -48,7 +43,6 @@ $pemCertificate
     cerFile.writeAsBytesSync(certificateBytes);
     pemFile.writeAsStringSync(pemString);
   }
-  
 
   Future<void> makeApiRequest(
       Uint8List publicKey, Uint8List signature, Uint8List messageBytes) async {
@@ -80,24 +74,22 @@ $pemCertificate
         title: const Text(
           "Sign up",
           style: TextStyle(
-            color: Colors.white,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
+            icon: const Icon(
+              Icons.more_vert,
+            ),
             onPressed: () {},
           ),
         ],
-        backgroundColor: const Color.fromARGB(255, 85, 209, 89),
         centerTitle: true,
       ),
       body: Container(
         width: double.infinity,
-        decoration:
-            const BoxDecoration(color: Color.fromARGB(255, 85, 209, 89)),
         child: Form(
           key: _formKey,
           child: Column(
@@ -109,7 +101,6 @@ $pemCertificate
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
                 ),
               ),
               const SizedBox(
@@ -118,7 +109,6 @@ $pemCertificate
               const Icon(
                 Icons.wallet,
                 size: 78,
-                color: Colors.white,
               ),
               const SizedBox(
                 height: 30,
@@ -133,7 +123,7 @@ $pemCertificate
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide:
-                          const BorderSide(width: 2, color: Colors.white),
+                          const BorderSide(width: 2, color: Colors.black),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide:
@@ -141,7 +131,7 @@ $pemCertificate
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     labelText: 'Enter CNIC',
-                    labelStyle: const TextStyle(color: Colors.white),
+                    labelStyle: const TextStyle(color: Colors.black),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -166,7 +156,7 @@ $pemCertificate
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide:
-                          const BorderSide(width: 2, color: Colors.white),
+                          const BorderSide(width: 2, color: Colors.black),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide:
@@ -174,7 +164,7 @@ $pemCertificate
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     labelText: 'Enter Secret_key',
-                    labelStyle: const TextStyle(color: Colors.white),
+                    labelStyle: const TextStyle(color: Colors.black),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -204,7 +194,6 @@ $pemCertificate
                       Uint8List publicKey =
                           generatePublicKey(privateKey).Q!.getEncoded(true);
                       print('Public Key: 0x${hex.encode(publicKey)}');
-
 
                       // print(
                       // 'Public Key: 0x${Uint8List.fromList(publicKey).toSet()}');
@@ -268,8 +257,6 @@ $pemCertificate
                     }
                   },
                   style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
                     padding: MaterialStateProperty.all<EdgeInsets>(
                         const EdgeInsets.all(20)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -281,7 +268,6 @@ $pemCertificate
                   child: const Text(
                     'Signup',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 85, 209, 89),
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),

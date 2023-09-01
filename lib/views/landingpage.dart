@@ -23,7 +23,7 @@ class landingpage extends StatefulWidget {
 
 class _landingpageState extends State<landingpage> {
   int _currentIndex = 0;
-  late List<Widget> _screens; 
+  late List<Widget> _screens;
 
   @override
   void initState() {
@@ -52,15 +52,14 @@ class _landingpageState extends State<landingpage> {
       bottomNavigationBar: Container(
         height: 65,
         decoration: BoxDecoration(
-          color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-            ),
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey.withOpacity(0.5),
+          //     spreadRadius: 2,
+          //     blurRadius: 5,
+          //   ),
+          // ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,7 +77,7 @@ class _landingpageState extends State<landingpage> {
 
   Widget buildNavBarItem(IconData iconData, String title, int index) {
     final isSelected = _currentIndex == index;
-     int notificationCount = NotificationCenter.notifications.length;
+    int notificationCount = NotificationCenter.notifications.length;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -88,37 +87,38 @@ class _landingpageState extends State<landingpage> {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         child: Stack(
-        children: [
-          Icon(
-            iconData,
-            size: 30,
-            color: isSelected ? Colors.green : Colors.black,
-          ),
-          if (index == 3 && notificationCount > 0) // Show badge only for "Notification" icon
-            Positioned(
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.red,
-                ),
-                constraints: BoxConstraints(
-                  minWidth: 16,
-                  minHeight: 16,
-                ),
-                child: Text(
-                  '$notificationCount',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
+          children: [
+            Icon(
+              iconData,
+              size: 30,
+              color: isSelected ? Colors.blue : Colors.black,
+            ),
+            if (index == 3 &&
+                notificationCount >
+                    0) // Show badge only for "Notification" icon
+              Positioned(
+                right: 0,
+                child: Container(
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.red,
                   ),
-                  textAlign: TextAlign.center,
+                  constraints: BoxConstraints(
+                    minWidth: 16,
+                    minHeight: 16,
+                  ),
+                  child: Text(
+                    '$notificationCount',
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
-            ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }

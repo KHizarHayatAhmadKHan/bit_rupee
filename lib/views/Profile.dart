@@ -15,18 +15,18 @@ class Profile extends StatelessWidget {
         title: Text(
           "Profile",
           style: TextStyle(
-            color: Colors.white,
+           
             fontSize: 24,
             fontWeight: FontWeight.w300,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
+            icon: const Icon(Icons.more_vert, ),
             onPressed: () {},
           ),
         ],
-        backgroundColor: const Color.fromARGB(255, 85, 209, 89),
+        
         centerTitle: true,
       ),
       body: Center(
@@ -45,12 +45,12 @@ class Profile extends StatelessWidget {
             SizedBox(height: 10),
             Text(
               "ID: $id",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(fontSize: 16, ),
             ),
             SizedBox(height: 10),
             Text(
               "Wallet Address: $walletaddress",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(fontSize: 16,),
             ),
             SizedBox(
               height: 100,
