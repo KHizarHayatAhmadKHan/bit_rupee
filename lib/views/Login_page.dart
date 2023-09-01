@@ -21,18 +21,18 @@ class _LoginPageState extends State<LoginPage> {
         title: const Text(
           "Welcome to bitRupee",
           style: TextStyle(
-            
             fontSize: 24,
             fontWeight: FontWeight.w300,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.more_vert,),
+            icon: const Icon(
+              Icons.more_vert,
+            ),
             onPressed: () {},
           ),
         ],
-       
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -43,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Container(
         width: double.infinity,
-        
         child: Form(
           key: _formKey,
           child: Column(
@@ -53,9 +52,9 @@ class _LoginPageState extends State<LoginPage> {
                 'Please Enter the Wallet ID to continue',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    ),
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(
                 height: 40,
@@ -63,7 +62,6 @@ class _LoginPageState extends State<LoginPage> {
               const Icon(
                 Icons.wallet,
                 size: 78,
-               
               ),
               const SizedBox(
                 height: 30,
@@ -86,7 +84,10 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                       labelText: 'Enter Wallet Number',
-                      labelStyle: const TextStyle(color: Colors.black)),
+                      labelStyle: TextStyle(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black)),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your id.';
@@ -215,7 +216,6 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   },
                   style: ButtonStyle(
-                     
                       padding: MaterialStateProperty.all<EdgeInsets>(
                           const EdgeInsets.all(20)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -225,7 +225,6 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text(
                     'Submit',
                     style: TextStyle(
-                     
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
