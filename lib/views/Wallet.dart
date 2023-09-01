@@ -1,14 +1,15 @@
 import 'dart:convert';
 
+import 'package:bit_rupee/views/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:bit_rupee/config/Config.dart';
+import 'package:provider/provider.dart';
 
-// ignore: must_be_immutable
 class Wallet extends StatefulWidget {
   final int id;
   final String walletaddress;
-  late int balance;
+  late int balance; // final changed to late.
 
   Wallet({
     required this.id,
@@ -38,20 +39,25 @@ class _WalletState extends State<Wallet> {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         setState(() {
+          // Update 'data' using the fetched data, assuming the response data structure is Map<String, dynamic>
+          // For example: data = responseData['data'];
           widget.balance = responseData['balance'];
         });
       } else {
         throw Exception('Failed to fetch data');
       }
     } catch (e) {
+      // Handle any errors, e.g., show an error message to the user
       print('Error fetching data: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor:
+          settingsProvider.isDarkMode ? Colors.grey[850] : Colors.grey[300],
       appBar: AppBar(
         actions: [
           IconButton(
@@ -61,7 +67,7 @@ class _WalletState extends State<Wallet> {
         ],
         title: const Text('Wallet'),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 85, 209, 89),
+        // backgroundColor: const Color.fromARGB(255, 85, 209, 89),
         leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
       ),
       body: RefreshIndicator(
@@ -75,10 +81,12 @@ class _WalletState extends State<Wallet> {
                 height: _isExpanded ? 400.0 : 170.0,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
-                      color: Colors.white,
-                      blurRadius: .5,
+                      color: settingsProvider.isDarkMode
+                          ? Color.fromARGB(255, 92, 91, 91)
+                          : Colors.white,
+                      blurRadius: 0.5,
                     ),
                   ],
                 ),
@@ -91,9 +99,10 @@ class _WalletState extends State<Wallet> {
                           width: 8.0,
                         ),
                         CircleAvatar(
-                          backgroundColor: Color.fromARGB(255, 85, 209, 89),
-                          child:
-                              Icon(Icons.wallet_outlined, color: Colors.white),
+                          // backgroundColor: Color.fromARGB(255, 85, 209, 89),
+                          child: Icon(
+                            Icons.wallet_outlined,
+                          ),
                         ),
                         SizedBox(width: 5.0),
                         Text("Total Wallet Balance",
@@ -138,10 +147,6 @@ class _WalletState extends State<Wallet> {
               child: const Text("Send Money"),
               style: ButtonStyle(
                 minimumSize: MaterialStateProperty.all(const Size(350, 50)),
-                backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 85, 209, 89)),
-                textStyle: MaterialStateProperty.all(
-                    const TextStyle(color: Colors.white, fontSize: 16)),
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15))),
               ),

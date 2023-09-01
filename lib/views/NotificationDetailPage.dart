@@ -31,12 +31,12 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
         title: Text(
           "Notification Detail",
           style: TextStyle(
-            color: Colors.white,
+            
             fontSize: 24,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w300,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 85, 209, 89),
+       
         centerTitle: true,
       ),
       body: Center(
@@ -84,7 +84,7 @@ class _AnimatedCircleState extends State<AnimatedCircle> {
         shape: BoxShape.circle,
         color: Colors.transparent,
         border: Border.all(
-          color: const Color.fromARGB(255, 85, 209, 89),
+          color: Colors.blue,
           width: 6,
         ),
       ),

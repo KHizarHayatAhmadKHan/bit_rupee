@@ -32,18 +32,18 @@ class _QRScreenState extends State<QRScreen> {
         title: Text(
           "Send/ Recieve Money",
           style: TextStyle(
-            color: Colors.white,
+            
             fontSize: 24,
             fontWeight: FontWeight.w300,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.wallet, color: Colors.white),
+            icon: const Icon(Icons.wallet, ),
             onPressed: () {},
           ),
         ],
-        backgroundColor: const Color.fromARGB(255, 85, 209, 89),
+      
         centerTitle: true,
       ),
       body: Center(
@@ -57,7 +57,7 @@ class _QRScreenState extends State<QRScreen> {
               style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w400,
-                  color: Color.fromARGB(255, 85, 209, 89)),
+                 ),
             ),
             const SizedBox(
               height: 40,
@@ -115,8 +115,7 @@ class _QRScreenState extends State<QRScreen> {
                 });
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromARGB(255, 85, 209, 89)),
+                  
                   padding: MaterialStateProperty.all<EdgeInsets>(
                       const EdgeInsets.all(20)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -126,7 +125,7 @@ class _QRScreenState extends State<QRScreen> {
               child: Text(
                 isScanning ? 'Go back' : 'Send Money',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 241, 245, 241),
+                 
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
